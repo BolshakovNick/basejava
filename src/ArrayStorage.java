@@ -2,8 +2,8 @@
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    int size;
+    private Resume[] storage = new Resume[10000];
+    private int size;
 
     void clear() {
         for (Resume r : storage) {
@@ -13,11 +13,8 @@ public class ArrayStorage {
 
     //save the new element after last element
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-            }
-        }
+        storage[size] = r;
+        size++;
     }
 
     //get the element
@@ -48,8 +45,8 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] resumes = new Resume[this.size];
-        for (int i = 0; i < this.size; i++) {
+        Resume[] resumes = new Resume[size];
+        for (int i = 0; i < size; i++) {
             resumes[i] = storage[i];
         }
         return resumes;
@@ -57,14 +54,6 @@ public class ArrayStorage {
 
     //not null element length
     int size() {
-        int result = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                result = i;
-                this.size = i;
-                break;
-            }
-        }
-        return result;
+        return size;
     }
 }
