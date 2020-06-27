@@ -3,9 +3,12 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    int size;
 
     void clear() {
-        storage = null;
+        for (Resume r : storage) {
+            r = null;
+        }
     }
 
     //save the new element after last element
@@ -20,7 +23,7 @@ public class ArrayStorage {
     //get the element
     Resume get(String uuid) {
         Resume resume = null;
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 resume = storage[i];
                 break;
@@ -31,11 +34,9 @@ public class ArrayStorage {
 
     //delete element and shift other elements one left
     void delete(String uuid) {
-        int count = size();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                storage[i] = null;
-                for (int j = i; j < count; j++) {
+                for (int j = i; j < size - 1; j++) {
                     storage[j] = storage[j + 1];
                 }
                 break;
@@ -47,22 +48,23 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] r = new Resume[this.size()];
-        for (int i = 0; i < size(); i++) {
-            r[i] = storage[i];
+        Resume[] resumes = new Resume[this.size];
+        for (int i = 0; i < this.size; i++) {
+            resumes[i] = storage[i];
         }
-        return r;
+        return resumes;
     }
 
     //not null element length
     int size() {
-        int size = 0;
+        int result = 0;
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
-                size = i;
+                result = i;
+                this.size = i;
                 break;
             }
         }
-        return size;
+        return result;
     }
 }
