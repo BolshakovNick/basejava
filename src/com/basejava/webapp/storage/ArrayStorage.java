@@ -16,45 +16,37 @@ public class ArrayStorage {
     }
 
     //save the new element after last element
-    public void save(Resume r) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i] == r) {
-                System.out.println("Error: storage already has this resume");
-                return;
-            }
-            if (size == storage.length) {
-                System.out.println("Exception: Array Index Out Of Bounds");
-            }
+    public void save(Resume resume) {
+        if (checkResume(resume) >= 0) {
+            System.out.println("Error: storage already has this resume");
+            return;
         }
-        storage[size] = r;
+        if (size == storage.length) {
+            System.out.println("Exception: Array Index Out Of Bounds");
+        }
+        storage[size] = resume;
         size++;
     }
     //get the element
     public Resume get(String uuid) {
-        Resume resume = null;
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                resume = storage[i];
-                break;
-            }
-            else {
-                System.out.println("Error: storage has not resume with this uuid");
-            }
+        if (checkResume(uuid) >=0) {
+            return storage[checkResume(uuid)];
         }
-        return resume;
+        else {
+            System.out.println("Error: storage has not resume with this uuid");
+            return null;
+        }
     }
 
     //delete element and shift other elements one left
     public void delete(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                storage[i] = storage[size-1];
-                storage[size-1] = null;
-                size--;
+        if (checkResume(uuid) >= 0) {
+            storage[checkResume(uuid)] = storage[size-1];
+            storage[size-1] = null;
+            size--;
             }
-            else {
-                System.out.println("Error: storage has not resume with this uuid");
-            }
+        else {
+            System.out.println("Error: storage has not resume with this uuid");
         }
     }
 
@@ -70,10 +62,29 @@ public class ArrayStorage {
         return size;
     }
 
-    public void update(Resume resume) {
-        for (int i = 0; i < size; i++) {
-            if(storage[i] == resume)
-                System.out.println("Error: storage already has this resume");
+    public void update(Resume oldResume, Resume newResume) {
+        if(checkResume(oldResume) >= 0) {
+            storage[checkResume(oldResume)] = newResume;
+            return;
         }
+        System.out.println("Error: storage already has this resume");
     }
+
+    private int checkResume (Resume resume) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i] == resume) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    private int checkResume (String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }
