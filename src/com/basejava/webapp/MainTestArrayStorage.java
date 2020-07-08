@@ -36,6 +36,7 @@ public class MainTestArrayStorage {
         Resume r4 = new Resume();
         r4.setUuid("uuid4");
         ARRAY_STORAGE.update(r1, r4);
+        ARRAY_STORAGE.update(new Resume(), new Resume());
     }
 
     static void printAll() {

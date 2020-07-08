@@ -33,7 +33,7 @@ public class ArrayStorage {
             return storage[checkResume(uuid)];
         }
         else {
-            System.out.println("Error: storage has not resume with this uuid");
+            System.out.println("Error: resume not found");
             return null;
         }
     }
@@ -46,7 +46,7 @@ public class ArrayStorage {
             size--;
             }
         else {
-            System.out.println("Error: storage has not resume with this uuid");
+            System.out.println("Error: resume not found");
         }
     }
 
@@ -67,12 +67,12 @@ public class ArrayStorage {
             storage[checkResume(oldResume)] = newResume;
             return;
         }
-        System.out.println("Error: storage already has this resume");
+        System.out.println("Error: resume not found");
     }
 
     private int checkResume (Resume resume) {
         for (int i = 0; i < size; i++) {
-            if (storage[i] == resume) {
+            if (storage[i].getUuid().equals(resume.getUuid())) {
                 return i;
             }
         }
