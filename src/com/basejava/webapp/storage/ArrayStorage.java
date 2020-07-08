@@ -2,6 +2,8 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -10,17 +12,23 @@ public class ArrayStorage {
     private int size;
 
     public void clear() {
-        for (Resume r : storage) {
-            r = null;
-        }
+        Arrays.fill(storage, null);
     }
 
     //save the new element after last element
     public void save(Resume r) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i] == r) {
+                System.out.println("Error: storage already has this resume");
+                return;
+            }
+            if (size == storage.length) {
+                System.out.println("Exception: Array Index Out Of Bounds");
+            }
+        }
         storage[size] = r;
         size++;
     }
-
     //get the element
     public Resume get(String uuid) {
         Resume resume = null;
@@ -28,6 +36,9 @@ public class ArrayStorage {
             if (storage[i].getUuid().equals(uuid)) {
                 resume = storage[i];
                 break;
+            }
+            else {
+                System.out.println("Error: storage has not resume with this uuid");
             }
         }
         return resume;
@@ -37,11 +48,12 @@ public class ArrayStorage {
     public void delete(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                for (int j = i; j < size - 1; j++) {
-                    storage[j] = storage[j + 1];
-                }
+                storage[i] = storage[size-1];
+                storage[size-1] = null;
                 size--;
-                break;
+            }
+            else {
+                System.out.println("Error: storage has not resume with this uuid");
             }
         }
     }
@@ -50,15 +62,18 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] resumes = new Resume[size];
-        for (int i = 0; i < size; i++) {
-            resumes[i] = storage[i];
-        }
-        return resumes;
+        return Arrays.copyOfRange(storage, 0, size-1);
     }
 
     //not null element length
     public int size() {
         return size;
+    }
+
+    public void update(Resume resume) {
+        for (int i = 0; i < size; i++) {
+            if(storage[i] == resume)
+                System.out.println("Error: storage already has this resume");
+        }
     }
 }
