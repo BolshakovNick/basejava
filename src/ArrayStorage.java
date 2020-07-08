@@ -21,7 +21,7 @@ public class ArrayStorage {
     Resume get(String uuid) {
         Resume resume = null;
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 resume = storage[i];
                 break;
             }
@@ -32,7 +32,7 @@ public class ArrayStorage {
     //delete element and shift other elements one left
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 for (int j = i; j < size - 1; j++) {
                     storage[j] = storage[j + 1];
                 }
