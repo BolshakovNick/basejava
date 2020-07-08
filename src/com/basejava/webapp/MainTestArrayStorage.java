@@ -33,6 +33,9 @@ public class MainTestArrayStorage {
         printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
+        Resume r4 = new Resume();
+        r4.setUuid("uuid4");
+        ARRAY_STORAGE.update(r1, r4);
     }
 
     static void printAll() {
