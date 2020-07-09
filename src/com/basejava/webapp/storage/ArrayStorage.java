@@ -18,35 +18,36 @@ public class ArrayStorage {
     //save the new element after last element
     public void save(Resume resume) {
         if (checkResume(resume) >= 0) {
-            System.out.println("Error: storage already has this resume");
+            System.out.println("Error: storage already has this resume with uuid [" + resume.getUuid() + "]");
             return;
         }
         if (size == storage.length) {
             System.out.println("Exception: Array Index Out Of Bounds");
+            return;
         }
         storage[size] = resume;
         size++;
     }
+
     //get the element
     public Resume get(String uuid) {
-        if (checkResume(uuid) >=0) {
-            return storage[checkResume(uuid)];
+        int i = checkResume(uuid);
+        if (i >= 0) {
+            return storage[i];
         }
-        else {
-            System.out.println("Error: resume not found");
-            return null;
-        }
+        System.out.println("Error: resume with uuid [" + uuid + "] not found");
+        return null;
     }
 
     //delete element and shift other elements one left
     public void delete(String uuid) {
-        if (checkResume(uuid) >= 0) {
-            storage[checkResume(uuid)] = storage[size-1];
-            storage[size-1] = null;
+        int i = checkResume(uuid);
+        if (i >= 0) {
+            storage[i] = storage[size - 1];
+            storage[size - 1] = null;
             size--;
-            }
-        else {
-            System.out.println("Error: resume not found");
+        } else {
+            System.out.println("Error: resume with uuid [" + uuid + "] not found");
         }
     }
 
@@ -54,7 +55,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size-1);
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     //not null element length
@@ -63,17 +64,18 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if(checkResume(resume.getUuid()) >= 0) {
-            storage[checkResume(resume)] = resume;
+        int i = checkResume(resume.getUuid());
+        if (i >= 0) {
+            storage[i] = resume;
             return;
         }
-        System.out.println("Error: resume not found");
+        System.out.println("Error: resume with uuid [" + resume.getUuid() + "] not found");
     }
 
     private int checkResume(Object object) {
         String uuid = null;
         if (object instanceof Resume) uuid = ((Resume) object).getUuid();
-        if (object instanceof String) uuid = (String)object;
+        if (object instanceof String) uuid = (String) object;
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
