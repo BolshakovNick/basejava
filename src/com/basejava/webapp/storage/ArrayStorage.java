@@ -70,15 +70,10 @@ public class ArrayStorage {
         System.out.println("Error: resume not found");
     }
 
-    private int checkResume (Resume resume) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(resume.getUuid())) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    private int checkResume (String uuid) {
+    private int checkResume(Object object) {
+        String uuid = null;
+        if (object instanceof Resume) uuid = ((Resume) object).getUuid();
+        if (object instanceof String) uuid = (String)object;
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
@@ -86,5 +81,4 @@ public class ArrayStorage {
         }
         return -1;
     }
-
 }
