@@ -62,9 +62,9 @@ public class ArrayStorage {
         return size;
     }
 
-    public void update(Resume oldResume, Resume newResume) {
-        if(checkResume(oldResume) >= 0) {
-            storage[checkResume(oldResume)] = newResume;
+    public void update(Resume resume) {
+        if(checkResume(resume.getUuid()) >= 0) {
+            storage[checkResume(resume)] = resume;
             return;
         }
         System.out.println("Error: resume not found");
