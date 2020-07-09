@@ -17,7 +17,7 @@ public class ArrayStorage {
 
     //save the new element after last element
     public void save(Resume resume) {
-        if (checkResume(resume) >= 0) {
+        if (checkResume(resume.getUuid()) >= 0) {
             System.out.println("Error: storage already has this resume with uuid [" + resume.getUuid() + "]");
             return;
         }
@@ -31,9 +31,9 @@ public class ArrayStorage {
 
     //get the element
     public Resume get(String uuid) {
-        int i = checkResume(uuid);
-        if (i >= 0) {
-            return storage[i];
+        int index = checkResume(uuid);
+        if (index >= 0) {
+            return storage[index];
         }
         System.out.println("Error: resume with uuid [" + uuid + "] not found");
         return null;
@@ -41,9 +41,9 @@ public class ArrayStorage {
 
     //delete element and shift other elements one left
     public void delete(String uuid) {
-        int i = checkResume(uuid);
-        if (i >= 0) {
-            storage[i] = storage[size - 1];
+        int index = checkResume(uuid);
+        if (index >= 0) {
+            storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
         } else {
@@ -64,18 +64,15 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int i = checkResume(resume.getUuid());
-        if (i >= 0) {
-            storage[i] = resume;
+        int index = checkResume(resume.getUuid());
+        if (index >= 0) {
+            storage[index] = resume;
             return;
         }
         System.out.println("Error: resume with uuid [" + resume.getUuid() + "] not found");
     }
 
-    private int checkResume(Object object) {
-        String uuid = null;
-        if (object instanceof Resume) uuid = ((Resume) object).getUuid();
-        if (object instanceof String) uuid = (String) object;
+    private int checkResume(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
