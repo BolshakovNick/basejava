@@ -13,6 +13,7 @@ public class ArrayStorage {
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     //save the new element after last element
