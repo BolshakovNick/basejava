@@ -7,21 +7,6 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public void save(Resume resume) {
-
-    }
-
-    @Override
-    public void delete(String uuid) {
-
-    }
-
-    @Override
     public Resume[] getAll() {
         return new Resume[0];
     }
@@ -36,5 +21,10 @@ public class SortedArrayStorage extends AbstractArrayStorage{
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
+    }
+
+    @Override
+    protected void specificSave(Resume resume) {
+        storage[Math.abs(getIndex(resume.getUuid())) - 1] = resume;
     }
 }
