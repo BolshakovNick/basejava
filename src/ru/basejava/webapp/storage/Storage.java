@@ -1,6 +1,6 @@
-package com.basejava.webapp.storage;
+package ru.basejava.webapp.storage;
 
-import com.basejava.webapp.model.Resume;
+import ru.basejava.webapp.model.Resume;
 
 /**
  * Array based storage for Resumes

@@ -1,6 +1,6 @@
-package com.basejava.webapp.storage;
+package ru.basejava.webapp.storage;
 
-import com.basejava.webapp.model.Resume;
+import ru.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage implements Storage{
-    public static final int STORAGE_LIMIT = 10000;
+    public static final int STORAGE_LIMIT = 100000;
     private Resume[] storage = new Resume[STORAGE_LIMIT ];
     private int size;
 

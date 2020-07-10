@@ -1,7 +1,7 @@
-package com.basejava.webapp;
+package ru.basejava.webapp;
 
-import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.storage.ArrayStorage;
+import ru.basejava.webapp.model.Resume;
+import ru.basejava.webapp.storage.ArrayStorage;
 
 /**
  * Test for your com.basejava.webapp.storage.ArrayStorage implementation
