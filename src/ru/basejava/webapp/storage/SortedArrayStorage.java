@@ -4,17 +4,7 @@ import ru.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
-
-    @Override
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
-
-    @Override
-    public void update(Resume resume) {
-
-    }
+public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected int getIndex(String uuid) {
@@ -24,7 +14,15 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    protected void specificSave(Resume resume) {
-        storage[Math.abs(getIndex(resume.getUuid())) - 1] = resume;
+    protected void doSave(int index, Resume resume) {
+        storage[Math.abs(index) - 1] = resume;
+    }
+
+    @Override
+    protected void doDelete(int index) {
+        for (int i = index; i < size; i++) {
+            if ((i + 1) < storage.length) storage[i] = storage[i + 1]; //check index out of bound
+            else storage[i] = null;
+        }
     }
 }

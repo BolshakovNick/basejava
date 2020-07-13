@@ -18,7 +18,10 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     protected abstract int getIndex(String uuid);
-    protected abstract void specificSave(Resume resume);
+
+    protected abstract void doSave(int index, Resume resume);
+
+    protected abstract void doDelete(int index);
 
     public Resume get(String uuid) {
         int index = getIndex(uuid);
@@ -35,7 +38,8 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        if (getIndex(resume.getUuid()) >= 0) {
+        int index = getIndex(resume.getUuid());
+        if (index >= 0) {
             System.out.println("Error: storage already has this resume with uuid [" + resume.getUuid() + "]");
             return;
         }
@@ -43,16 +47,14 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Exception: Array Index Out Of Bounds");
             return;
         }
-        specificSave(resume);
+        doSave(index, resume);
+        size++;
     }
 
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
-            for (int i = index; i < size; i++) {
-                if ((i + 1) < storage.length) storage[i] = storage[i + 1]; //check index out of bound
-                else storage[i] = null;
-            }
+            doDelete(index);
             size--;
         } else {
             System.out.println("Error: resume with uuid [" + uuid + "] not found");
