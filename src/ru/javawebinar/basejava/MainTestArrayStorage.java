@@ -1,7 +1,7 @@
-package ru.basejava.webapp;
+package ru.javawebinar.basejava;
 
-import ru.basejava.webapp.model.Resume;
-import ru.basejava.webapp.storage.ArrayStorage;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.ArrayStorage;
 
 /**
  * Test for your com.basejava.webapp.storage.ArrayStorage implementation
@@ -10,11 +10,11 @@ public class MainTestArrayStorage {
     static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume();
+        Resume r1 = new Resume(uuid);
         r1.setUuid("uuid1");
-        Resume r2 = new Resume();
+        Resume r2 = new Resume(uuid);
         r2.setUuid("uuid2");
-        Resume r3 = new Resume();
+        Resume r3 = new Resume(uuid);
         r3.setUuid("uuid3");
 
         ARRAY_STORAGE.save(r1);
@@ -33,7 +33,7 @@ public class MainTestArrayStorage {
         printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
-        Resume r4 = new Resume();
+        Resume r4 = new Resume(uuid);
         r4.setUuid("uuid2");
         ARRAY_STORAGE.update(r4);
     }

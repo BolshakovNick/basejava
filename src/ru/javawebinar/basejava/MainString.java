@@ -1,4 +1,4 @@
-package ru.basejava.webapp;
+package ru.javawebinar.basejava;
 
 public class MainString {
     public static void main(String[] args) {
