@@ -9,11 +9,6 @@ public class ListStorage extends AbstractStorage {
     private List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected Resume[] getResumesArray() {
-        return (Resume[]) storage.toArray();
-    }
-
-    @Override
     protected int getIndex(String uuid) {
         return storage.indexOf(new Resume(uuid));
     }
@@ -41,5 +36,15 @@ public class ListStorage extends AbstractStorage {
     @Override
     public void clear() {
         storage.clear();
+    }
+
+    @Override
+    public Resume[] getAll() {
+        return (Resume[]) storage.toArray();
+    }
+
+    @Override
+    public int size() {
+        return storage.size();
     }
 }

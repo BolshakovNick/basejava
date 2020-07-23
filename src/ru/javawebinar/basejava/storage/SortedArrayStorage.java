@@ -20,10 +20,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(int index) {
+    protected void doArrayDelete(int index) {
         int numMoved = size - index - 1;
         if (numMoved > 0)
             System.arraycopy(storage, index + 1, storage, index, numMoved);
-        storage[size - 1] = null;
     }
 }

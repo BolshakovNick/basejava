@@ -10,10 +10,18 @@ import java.util.Arrays;
  */
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
+    protected int size = 0;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
 
     protected abstract void doArraySave(int index, Resume resume);
+
+    protected abstract void doArrayDelete(int index);
+
+    @Override
+    public int size() {
+        return size;
+    }
 
     @Override
     public void clear() {
@@ -27,11 +35,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
             doArraySave(index, resume);
+            size++;
         }
     }
 
     @Override
-    protected Resume[] getResumesArray() {
+    protected void doDelete(int index) {
+        doArrayDelete(index);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    @Override
+    public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
