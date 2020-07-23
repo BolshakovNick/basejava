@@ -55,8 +55,4 @@ public abstract class AbstractStorage implements Storage {
             doUpdate(index, resume);
         }
     }
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
 }
