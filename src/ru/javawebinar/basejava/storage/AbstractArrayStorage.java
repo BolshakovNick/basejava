@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
@@ -30,17 +32,23 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(int index, Resume resume) {
+    protected void doSave(Object key, Resume resume) {
+        int index = getIndex(key);
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
-        } else {
-            saveToStorage(index, resume);
-            size++;
+        } else if (index >= 0) {
+            throw new ExistStorageException(resume.getUuid());
         }
+        saveToStorage(index, resume);
+        size++;
     }
 
     @Override
-    protected void doDelete(int index) {
+    protected void doDelete(Object key, String uuid) {
+        int index = getIndex(key);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        }
         deleteFromStorage(index);
         storage[size - 1] = null;
         size--;
@@ -54,12 +62,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    protected void doUpdate(int index, Resume resume) {
+    protected void doUpdate(Object key, Resume resume) {
+        int index = getIndex(key);
+        if (index < 0) {
+            throw new NotExistStorageException(resume.getUuid());
+        }
         storage[index] = resume;
     }
 
     @Override
-    protected Resume doGet(int index) {
+    protected Resume doGet(Object key, String uuid) {
+        int index = getIndex(key);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        }
         return storage[index];
+    }
+
+    protected int getIndex(Object key) {
+        return (Integer) key;
     }
 }

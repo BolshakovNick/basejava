@@ -1,58 +1,41 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getKey(String uuid);
 
-    protected abstract void doSave(int index, Resume resume);
+    protected abstract void doSave(Object key, Resume resume);
 
-    protected abstract void doDelete(int index);
+    protected abstract void doDelete(Object key, String uuid);
 
-    protected abstract void doUpdate(int index, Resume resume);
+    protected abstract void doUpdate(Object key, Resume resume);
 
-    protected abstract Resume doGet(int index);
+    protected abstract Resume doGet(Object key, String uuid);
 
     @Override
     public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        doSave(index, resume);
+        Object key = getKey(resume.getUuid());
+        doSave(key, resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return doGet(index);
+        Object key = getKey(uuid);
+        return doGet(key, uuid);
     }
 
 
     @Override
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            doDelete(index);
-        }
-
+        Object key = getKey(uuid);
+        doDelete(key, uuid);
     }
 
     @Override
     public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            doUpdate(index, resume);
-        }
+        Object key = getKey(resume.getUuid());
+        doUpdate(key, resume);
     }
 }

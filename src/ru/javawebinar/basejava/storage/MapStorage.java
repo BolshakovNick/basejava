@@ -4,55 +4,47 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ListStorage extends AbstractStorage {
-    private List<Resume> storage = new ArrayList<>();
+public class MapStorage extends AbstractStorage {
+    private Map<String, Resume> storage = new HashMap<>();
 
     @Override
     protected Object getKey(String uuid) {
-        return storage.indexOf(new Resume(uuid));
-    }
-
-    protected int getIndex(Object key) {
-        return (Integer) key;
+        return uuid;
     }
 
     @Override
     protected void doSave(Object key, Resume resume) {
-        int index = getIndex(key);
-        if (index >= 0) {
+        if (storage.containsKey(key)) {
             throw new ExistStorageException(resume.getUuid());
         }
-        storage.add(resume);
+        storage.put((String) key, resume);
     }
 
     @Override
     protected void doDelete(Object key, String uuid) {
-        int index = getIndex(key);
-        if (index < 0) {
+        if (!storage.containsKey(key)) {
             throw new NotExistStorageException(uuid);
         }
-        storage.remove(index);
+        storage.remove(key);
     }
 
     @Override
     protected void doUpdate(Object key, Resume resume) {
-        int index = getIndex(key);
-        if (index < 0) {
+        if (!storage.containsKey(key)) {
             throw new NotExistStorageException(resume.getUuid());
         }
-        storage.set(index, resume);
+        storage.put((String) key, resume);
     }
 
     @Override
     protected Resume doGet(Object key, String uuid) {
-        int index = getIndex(key);
-        if (index < 0) {
+        if (!storage.containsKey(key)) {
             throw new NotExistStorageException(uuid);
         }
-        return storage.get(index);
+        return storage.get(key);
     }
 
     @Override
@@ -62,7 +54,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) storage.toArray();
+        return (Resume[]) storage.values().toArray();
     }
 
     @Override
