@@ -11,48 +11,43 @@ public class ListStorage extends AbstractStorage {
     private List<Resume> storage = new ArrayList<>();
 
     @Override
+    protected void checkExistResume(Object key, String uuid) {
+        if ((Integer) key >= 0) {
+            throw new ExistStorageException(uuid);
+        }
+    }
+
+    @Override
+    protected void checkNotExistResume(Object key, String uuid) {
+        if ((Integer) key < 0) {
+            throw new NotExistStorageException(uuid);
+        }
+    }
+
+    @Override
     protected Object getKey(String uuid) {
         return storage.indexOf(new Resume(uuid));
     }
 
-    protected int getIndex(Object key) {
-        return (Integer) key;
-    }
-
     @Override
     protected void doSave(Object key, Resume resume) {
-        int index = getIndex(key);
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
         storage.add(resume);
     }
 
     @Override
-    protected void doDelete(Object key, String uuid) {
-        int index = getIndex(key);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+    protected void doDelete(Object key) {
+        int index = (Integer) key;
         storage.remove(index);
     }
 
     @Override
     protected void doUpdate(Object key, Resume resume) {
-        int index = getIndex(key);
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        storage.set(index, resume);
+        storage.set((Integer) key, resume);
     }
 
     @Override
-    protected Resume doGet(Object key, String uuid) {
-        int index = getIndex(key);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage.get(index);
+    protected Resume doGet(Object key) {
+        return storage.get((Integer) key);
     }
 
     @Override

@@ -8,34 +8,45 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void doSave(Object key, Resume resume);
 
-    protected abstract void doDelete(Object key, String uuid);
+    protected abstract void doDelete(Object key);
 
     protected abstract void doUpdate(Object key, Resume resume);
 
-    protected abstract Resume doGet(Object key, String uuid);
+    protected abstract Resume doGet(Object key);
+
+    protected abstract void checkExistResume(Object key, String uuid);
+
+    protected abstract void checkNotExistResume(Object key, String uuid);
 
     @Override
     public void save(Resume resume) {
-        Object key = getKey(resume.getUuid());
+        String uuid = resume.getUuid();
+        Object key = getKey(uuid);
+        checkExistResume(key, uuid);
         doSave(key, resume);
     }
 
     @Override
     public Resume get(String uuid) {
         Object key = getKey(uuid);
-        return doGet(key, uuid);
+        checkNotExistResume(key, uuid);
+        return doGet(key);
     }
 
 
     @Override
     public void delete(String uuid) {
         Object key = getKey(uuid);
-        doDelete(key, uuid);
+        checkNotExistResume(key, uuid);
+        doDelete(key);
     }
 
     @Override
     public void update(Resume resume) {
-        Object key = getKey(resume.getUuid());
+        String uuid = resume.getUuid();
+        Object key = getKey(uuid);
+        checkNotExistResume(key, uuid);
         doUpdate(key, resume);
     }
+
 }

@@ -14,36 +14,37 @@ public class MapStorage extends AbstractStorage {
     protected Object getKey(String uuid) {
         return uuid;
     }
+    @Override
+    protected void checkExistResume(Object key, String uuid) {
+        if (storage.containsKey(key)) {
+            throw new ExistStorageException(uuid);
+        }
+    }
+
+    @Override
+    protected void checkNotExistResume(Object key, String uuid) {
+        if (!storage.containsKey(key)) {
+            throw new NotExistStorageException(uuid);
+        }
+    }
 
     @Override
     protected void doSave(Object key, Resume resume) {
-        if (storage.containsKey(key)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
         storage.put((String) key, resume);
     }
 
     @Override
-    protected void doDelete(Object key, String uuid) {
-        if (!storage.containsKey(key)) {
-            throw new NotExistStorageException(uuid);
-        }
+    protected void doDelete(Object key) {
         storage.remove(key);
     }
 
     @Override
     protected void doUpdate(Object key, Resume resume) {
-        if (!storage.containsKey(key)) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
         storage.put((String) key, resume);
     }
 
     @Override
-    protected Resume doGet(Object key, String uuid) {
-        if (!storage.containsKey(key)) {
-            throw new NotExistStorageException(uuid);
-        }
+    protected Resume doGet(Object key) {
         return storage.get(key);
     }
 

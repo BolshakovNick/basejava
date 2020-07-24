@@ -21,6 +21,20 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void deleteFromStorage(int index);
 
     @Override
+    protected void checkExistResume(Object key, String uuid) {
+        if ((Integer) key >= 0) {
+            throw new ExistStorageException(uuid);
+        }
+    }
+
+    @Override
+    protected void checkNotExistResume(Object key, String uuid) {
+        if ((Integer) key < 0) {
+            throw new NotExistStorageException(uuid);
+        }
+    }
+
+    @Override
     public int size() {
         return size;
     }
@@ -33,23 +47,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void doSave(Object key, Resume resume) {
-        int index = getIndex(key);
+        int index = (Integer) key;
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
-        } else if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
         }
         saveToStorage(index, resume);
         size++;
     }
 
     @Override
-    protected void doDelete(Object key, String uuid) {
-        int index = getIndex(key);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        deleteFromStorage(index);
+    protected void doDelete(Object key) {
+        deleteFromStorage((Integer) key);
         storage[size - 1] = null;
         size--;
     }
@@ -63,23 +71,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     protected void doUpdate(Object key, Resume resume) {
-        int index = getIndex(key);
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        storage[index] = resume;
+        storage[(Integer) key] = resume;
     }
 
     @Override
-    protected Resume doGet(Object key, String uuid) {
-        int index = getIndex(key);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
-    }
-
-    protected int getIndex(Object key) {
-        return (Integer) key;
+    protected Resume doGet(Object key) {
+        return storage[(Integer) key];
     }
 }
