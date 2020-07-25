@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
@@ -14,9 +16,19 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume doGet(Object key);
 
-    protected abstract void checkExistResume(Object key, String uuid);
+    protected abstract boolean isResumeExist(Object key);
 
-    protected abstract void checkNotExistResume(Object key, String uuid);
+    protected void checkExistResume(Object key, String uuid) {
+        if (isResumeExist(key)) {
+            throw new ExistStorageException(uuid);
+        }
+    }
+
+    protected void checkNotExistResume(Object key, String uuid) {
+        if (!isResumeExist(key)) {
+            throw new NotExistStorageException(uuid);
+        }
+    }
 
     @Override
     public void save(Resume resume) {
