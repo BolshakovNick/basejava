@@ -18,6 +18,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void deleteFromStorage(int index);
 
+    protected abstract Integer getKey(String uuid);
+
     @Override
     protected boolean isResumeExist(Object key) {
         return (Integer) key >= 0;

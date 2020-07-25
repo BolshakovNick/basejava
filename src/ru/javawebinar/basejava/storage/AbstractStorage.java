@@ -18,7 +18,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract boolean isResumeExist(Object key);
 
-    protected Object checkExistResume(String uuid) {
+    protected Object getNotExistedKey(String uuid) {
         Object key = getKey(uuid);
         if (isResumeExist(key)) {
             throw new ExistStorageException(uuid);
@@ -26,7 +26,7 @@ public abstract class AbstractStorage implements Storage {
         return key;
     }
 
-    protected Object checkNotExistResume(String uuid) {
+    protected Object getExistedKey(String uuid) {
         Object key = getKey(uuid);
         if (!isResumeExist(key)) {
             throw new NotExistStorageException(uuid);
@@ -37,24 +37,24 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public void save(Resume resume) {
         String uuid = resume.getUuid();
-        doSave(checkExistResume(uuid), resume);
+        doSave(getNotExistedKey(uuid), resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        return doGet(checkNotExistResume(uuid));
+        return doGet(getExistedKey(uuid));
     }
 
 
     @Override
     public void delete(String uuid) {
-        doDelete(checkNotExistResume(uuid));
+        doDelete(getExistedKey(uuid));
     }
 
     @Override
     public void update(Resume resume) {
         String uuid = resume.getUuid();
-        doUpdate(checkNotExistResume(uuid), resume);
+        doUpdate(getExistedKey(uuid) , resume);
     }
 
 }
