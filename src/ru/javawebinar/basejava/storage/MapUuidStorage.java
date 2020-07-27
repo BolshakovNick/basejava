@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.*;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage {
     private Map<String, Resume> storage = new HashMap<>();
 
     @Override
@@ -13,7 +13,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected String getKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
@@ -45,7 +45,7 @@ public class MapStorage extends AbstractStorage {
     @Override
     public List<Resume> getAllSorted() {
         ArrayList<Resume> resumes = new ArrayList<>(storage.values());
-        resumes.sort(Comparator.comparing(Resume::getUuid));
+        resumes.sort(Resume::compareTo);
         return resumes;
     }
 

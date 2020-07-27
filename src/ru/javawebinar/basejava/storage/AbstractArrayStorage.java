@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void deleteFromStorage(int index);
 
-    protected abstract Integer getKey(String uuid);
+    protected abstract Integer getSearchKey(String uuid);
 
     @Override
     protected boolean isResumeExist(Object key) {
@@ -61,7 +60,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> result = Arrays.asList(Arrays.copyOfRange(storage, 0, size));
-        result.sort(Comparator.comparing(Resume::getUuid));
+        result.sort(Resume::compareTo);
         return result;
     }
 
