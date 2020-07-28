@@ -4,6 +4,8 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
     protected abstract Object getSearchKey(String uuid);
@@ -18,21 +20,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract boolean isResumeExist(Object key);
 
-    protected Object getNotExistedKey(String uuid) {
-        Object key = getSearchKey(uuid);
-        if (isResumeExist(key)) {
-            throw new ExistStorageException(uuid);
-        }
-        return key;
-    }
-
-    protected Object getExistedKey(String uuid) {
-        Object key = getSearchKey(uuid);
-        if (!isResumeExist(key)) {
-            throw new NotExistStorageException(uuid);
-        }
-        return key;
-    }
+    protected abstract List<Resume> getList();
 
     @Override
     public void save(Resume resume) {
@@ -57,4 +45,26 @@ public abstract class AbstractStorage implements Storage {
         doUpdate(getExistedKey(uuid) , resume);
     }
 
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> result = getList();
+        result.sort(Resume::compareTo);
+        return result;
+    }
+
+    private Object getNotExistedKey(String uuid) {
+        Object key = getSearchKey(uuid);
+        if (isResumeExist(key)) {
+            throw new ExistStorageException(uuid);
+        }
+        return key;
+    }
+
+    private Object getExistedKey(String uuid) {
+        Object key = getSearchKey(uuid);
+        if (!isResumeExist(key)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return key;
+    }
 }

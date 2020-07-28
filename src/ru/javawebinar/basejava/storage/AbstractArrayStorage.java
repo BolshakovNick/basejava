@@ -54,14 +54,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> result = Arrays.asList(Arrays.copyOfRange(storage, 0, size));
-        result.sort(Resume::compareTo);
-        return result;
+    protected List<Resume> getList() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     protected void doUpdate(Object key, Resume resume) {
