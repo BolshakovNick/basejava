@@ -5,11 +5,11 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     private List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected boolean isResumeExist(Object key) {
+    protected boolean isResumeExist(Integer key) {
         return (Integer) key >= 0;
     }
 
@@ -22,23 +22,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Object key, Resume resume) {
+    protected void doSave(Integer key, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected void doDelete(Object key) {
-        storage.remove(((Integer) key).intValue());
+    protected void doDelete(Integer key) {
+        storage.remove((key).intValue());
     }
 
     @Override
-    protected void doUpdate(Object key, Resume resume) {
-        storage.set((Integer) key, resume);
+    protected void doUpdate(Integer key, Resume resume) {
+        storage.set(key, resume);
     }
 
     @Override
-    protected Resume doGet(Object key) {
-        return storage.get((Integer) key);
+    protected Resume doGet(Integer key) {
+        return storage.get(key);
     }
 
     @Override

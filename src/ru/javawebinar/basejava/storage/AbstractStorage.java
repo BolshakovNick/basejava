@@ -6,19 +6,19 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract SK getSearchKey(String uuid);
 
-    protected abstract void doSave(Object key, Resume resume);
+    protected abstract void doSave(SK key, Resume resume);
 
-    protected abstract void doDelete(Object key);
+    protected abstract void doDelete(SK key);
 
-    protected abstract void doUpdate(Object key, Resume resume);
+    protected abstract void doUpdate(SK key, Resume resume);
 
-    protected abstract Resume doGet(Object key);
+    protected abstract Resume doGet(SK key);
 
-    protected abstract boolean isResumeExist(Object key);
+    protected abstract boolean isResumeExist(SK key);
 
     protected abstract List<Resume> getList();
 
@@ -52,16 +52,16 @@ public abstract class AbstractStorage implements Storage {
         return result;
     }
 
-    private Object getNotExistedKey(String uuid) {
-        Object key = getSearchKey(uuid);
+    private SK getNotExistedKey(String uuid) {
+        SK key = getSearchKey(uuid);
         if (isResumeExist(key)) {
             throw new ExistStorageException(uuid);
         }
         return key;
     }
 
-    private Object getExistedKey(String uuid) {
-        Object key = getSearchKey(uuid);
+    private SK getExistedKey(String uuid) {
+        SK key = getSearchKey(uuid);
         if (!isResumeExist(key)) {
             throw new NotExistStorageException(uuid);
         }
