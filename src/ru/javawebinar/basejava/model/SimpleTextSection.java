@@ -2,10 +2,10 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class TextContent extends Content {
+public class SimpleTextSection extends AbstractSection {
     private String text;
 
-    public TextContent(String text) {
+    public SimpleTextSection(String text) {
         this.text = text;
     }
 
@@ -27,7 +27,7 @@ public class TextContent extends Content {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TextContent that = (TextContent) o;
+        SimpleTextSection that = (SimpleTextSection) o;
 
         return Objects.equals(text, that.text);
     }

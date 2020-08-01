@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MarkingTextContent extends Content {
+public class MarkingListSection extends AbstractSection {
     private List<String> markingLines;
 
-    public MarkingTextContent() {
+    public MarkingListSection() {
         this.markingLines = new ArrayList<>();
     }
 
@@ -53,7 +53,7 @@ public class MarkingTextContent extends Content {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MarkingTextContent that = (MarkingTextContent) o;
+        MarkingListSection that = (MarkingListSection) o;
 
         return Objects.equals(markingLines, that.markingLines);
     }

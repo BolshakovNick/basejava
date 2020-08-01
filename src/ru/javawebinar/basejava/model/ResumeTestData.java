@@ -10,7 +10,7 @@ public class ResumeTestData {
     public static void main(String[] args) throws ResumeContentException, MalformedURLException {
         Resume resume = new Resume("uuid1", "Григорий Кислин");
         Map<ContactType, String> contacts = resume.getContacts();
-        Map<SectionType, Content> content = resume.getContent();
+        Map<SectionType, AbstractSection> content = resume.getContent();
 
         contacts.put(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
@@ -20,14 +20,14 @@ public class ResumeTestData {
         contacts.put(ContactType.STACK_OVERFLOW, "https://stackoverflow.com/users/548473");
         contacts.put(ContactType.HOME_PAGE, "http://gkislin.ru/");
 
-        content.put(SectionType.OBJECTIVE, new TextContent("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
-        content.put(SectionType.PERSONAL, new TextContent("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
-        content.put(SectionType.ACHIEVEMENT, new MarkingTextContent());
-        content.put(SectionType.QUALIFICATIONS, new MarkingTextContent());
-        content.put(SectionType.EXPERIENCE, new LinkContent());
-        content.put(SectionType.EDUCATION, new LinkContent());
+        content.put(SectionType.OBJECTIVE, new SimpleTextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
+        content.put(SectionType.PERSONAL, new SimpleTextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+        content.put(SectionType.ACHIEVEMENT, new MarkingListSection());
+        content.put(SectionType.QUALIFICATIONS, new MarkingListSection());
+        content.put(SectionType.EXPERIENCE, new LinkMapSection());
+        content.put(SectionType.EDUCATION, new LinkMapSection());
 
-        MarkingTextContent achievements = (MarkingTextContent) content.get(SectionType.ACHIEVEMENT);
+        MarkingListSection achievements = (MarkingListSection) content.get(SectionType.ACHIEVEMENT);
 
         achievements.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven.\n" +
                 "Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\".\n" +
@@ -45,7 +45,7 @@ public class ResumeTestData {
         achievements.add("Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat, Eport, Chronopay,\n" +
                 "Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
 
-        MarkingTextContent qualifications = (MarkingTextContent) content.get(SectionType.QUALIFICATIONS);
+        MarkingListSection qualifications = (MarkingListSection) content.get(SectionType.QUALIFICATIONS);
 
         qualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         qualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
@@ -68,7 +68,7 @@ public class ResumeTestData {
                 "функционального программирования");
         qualifications.add("Родной русский, английский \"upper intermediate\"");
 
-        LinkContent exp = (LinkContent) content.get(SectionType.EXPERIENCE);
+        LinkMapSection exp = (LinkMapSection) content.get(SectionType.EXPERIENCE);
 
         exp.add(new URL("http://javaops.ru/"), "10/2013 - Сейчас    Автор проекта.\n" +
                 "Создание, организация и проведение Java онлайн проектов и стажировок.");
@@ -86,7 +86,7 @@ public class ResumeTestData {
                 "EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и\n" +
                 "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
 
-        LinkContent edu = (LinkContent) content.get(SectionType.EDUCATION);
+        LinkMapSection edu = (LinkMapSection) content.get(SectionType.EDUCATION);
         edu.add(new URL("https://www.coursera.org/course/progfun"), "03/2013 - 05/2013\t\"Functional Programming Principles in Scala\" by Martin Odersky");
         edu.add(new URL("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"), "Luxoft\n" +
                 "03/2011 - 04/2011\tК.урс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"");
@@ -107,8 +107,8 @@ public class ResumeTestData {
         System.out.println();
         System.out.println();
 
-        for (Map.Entry<SectionType, Content> pair : content.entrySet()) {
-            System.out.println(pair.getKey().getTitle() + '\n' + pair.getValue().toString());
+        for (Map.Entry<SectionType, AbstractSection> pair : content.entrySet()) {
+            System.out.println(pair.getKey().getTitle() + '\n' + pair.getValue().toString() + '\n');
         }
     }
 }

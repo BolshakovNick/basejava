@@ -16,7 +16,7 @@ public class Resume implements Comparable<Resume> {
 
     //https://www.codeflow.site/ru/article/java-enum-map
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private Map<SectionType, Content> content = new EnumMap<>(SectionType.class);
+    private Map<SectionType, AbstractSection> content = new EnumMap<>(SectionType.class);
 
     public String getFullName() {
         return fullName;
@@ -75,7 +75,7 @@ public class Resume implements Comparable<Resume> {
         return contacts;
     }
 
-    public Map<SectionType, Content> getContent() {
+    public Map<SectionType, AbstractSection> getContent() {
         return content;
     }
 }

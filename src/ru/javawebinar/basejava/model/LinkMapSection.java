@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class LinkContent extends Content {
+public class LinkMapSection extends AbstractSection {
     Map<URL, String> linkContent;
 
-    public LinkContent() {
+    public LinkMapSection() {
         this.linkContent = new HashMap<>();
     }
 
@@ -40,7 +40,7 @@ public class LinkContent extends Content {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<URL, String> pair : linkContent.entrySet()) {
-           builder.append(pair.getKey().toString()).append('\n').append(pair.getValue());
+           builder.append(pair.getKey().toString()).append('\n').append(pair.getValue()).append('\n');
         }
         return builder.toString();
     }
@@ -50,7 +50,7 @@ public class LinkContent extends Content {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LinkContent that = (LinkContent) o;
+        LinkMapSection that = (LinkMapSection) o;
 
         return Objects.equals(linkContent, that.linkContent);
     }
