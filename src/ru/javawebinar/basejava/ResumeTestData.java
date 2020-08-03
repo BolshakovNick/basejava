@@ -1,13 +1,17 @@
-package ru.javawebinar.basejava.model;
+package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.exception.ResumeContentException;
+import ru.javawebinar.basejava.model.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
-    public static void main(String[] args) throws ResumeContentException, MalformedURLException {
+    public static void main(String[] args) throws MalformedURLException, ParseException {
         Resume resume = new Resume("uuid1", "Григорий Кислин");
         Map<ContactType, String> contacts = resume.getContacts();
         Map<SectionType, AbstractSection> content = resume.getContent();
@@ -24,10 +28,10 @@ public class ResumeTestData {
         content.put(SectionType.PERSONAL, new SimpleTextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
         content.put(SectionType.ACHIEVEMENT, new MarkingListSection());
         content.put(SectionType.QUALIFICATIONS, new MarkingListSection());
-        content.put(SectionType.EXPERIENCE, new LinkMapSection());
-        content.put(SectionType.EDUCATION, new LinkMapSection());
+        content.put(SectionType.EXPERIENCE, new Experience());
+        content.put(SectionType.EDUCATION, new Education());
 
-        MarkingListSection achievements = (MarkingListSection) content.get(SectionType.ACHIEVEMENT);
+        List<String> achievements = ((MarkingListSection) content.get(SectionType.ACHIEVEMENT)).getMarkingLines();
 
         achievements.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven.\n" +
                 "Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\".\n" +
@@ -45,7 +49,7 @@ public class ResumeTestData {
         achievements.add("Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat, Eport, Chronopay,\n" +
                 "Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
 
-        MarkingListSection qualifications = (MarkingListSection) content.get(SectionType.QUALIFICATIONS);
+        List<String> qualifications = ((MarkingListSection) content.get(SectionType.QUALIFICATIONS)).getMarkingLines();
 
         qualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         qualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
@@ -68,39 +72,48 @@ public class ResumeTestData {
                 "функционального программирования");
         qualifications.add("Родной русский, английский \"upper intermediate\"");
 
-        LinkMapSection exp = (LinkMapSection) content.get(SectionType.EXPERIENCE);
+        List<LinkDateTextSection> exp = ((Experience) content.get(SectionType.EXPERIENCE)).getWorkList();
+        SimpleDateFormat format = new SimpleDateFormat("MM/yyyy");
 
-        exp.add(new URL("http://javaops.ru/"), "10/2013 - Сейчас    Автор проекта.\n" +
-                "Создание, организация и проведение Java онлайн проектов и стажировок.");
-        exp.add(new URL("https://www.wrike.com/"), "10/2014 - 01/2016\tСтарший разработчик (backend)\n" +
+        exp.add(new LinkDateTextSection(new URL("http://javaops.ru/"), format.parse("10/2013"), new Date(), "Автор проекта.\n" +
+                "Создание, организация и проведение Java онлайн проектов и стажировок."));
+
+        exp.add(new LinkDateTextSection(new URL("https://www.wrike.com/"), format.parse("10/2014"), format.parse("01/2016"), "Старший разработчик (backend)\n" +
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring,\n" +
                 "MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2,\n" +
-                "JWT SSO.");
-        exp.add(new URL("http://www.luxoft.ru/"), "12/2010 - 04/2012\tВедущий программист" +
+                "JWT SSO."));
+
+        exp.add(new LinkDateTextSection(new URL("http://www.luxoft.ru/"), format.parse("12/2010"), format.parse("04/2012"), "Ведущий программист" +
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\n" +
                 "Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для\n" +
                 "администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring,\n" +
-                "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
-        exp.add(new URL("https://www.yota.ru/"), "06/2008 - 12/2010\tВедущий специалист\n" +
+                "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
+
+        exp.add(new LinkDateTextSection(new URL("https://www.yota.ru/"), format.parse("06/2008"), format.parse("12/2010"), "Ведущий специалист\n" +
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J,\n" +
                 "EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и\n" +
-                "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
+                "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"));
 
-        LinkMapSection edu = (LinkMapSection) content.get(SectionType.EDUCATION);
-        edu.add(new URL("https://www.coursera.org/course/progfun"), "03/2013 - 05/2013\t\"Functional Programming Principles in Scala\" by Martin Odersky");
-        edu.add(new URL("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"), "Luxoft\n" +
-                "03/2011 - 04/2011\tК.урс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"");
-        edu.add(new URL("http://www.siemens.ru/"), "01/2005 - 04/2005\t3 месяца обучения мобильным IN сетям (Берлин)");
-        edu.add(new URL("http://www.alcatel.ru/"), "09/1997 - 03/1998\t6 месяцев обучения цифровым телефонным сетям (Москва)");
-        edu.add(new URL("http://www.ifmo.ru/"), "09/1993 - 07/1996\tАспирантура (программист С, С++)\n" +
-                "09/1987 - 07/1993\tИнженер (программист Fortran, C)");
-        edu.add(new URL("http://www.school.mipt.ru/"), "09/1984 - 06/1987\tЗакончил с отличием");
+        List<LinkDateTextSection> edu = ((Education) content.get(SectionType.EDUCATION)).getEducationList();
+
+        edu.add(new LinkDateTextSection(new URL("https://www.coursera.org/course/progfun"), format.parse("03/2013"), format.parse("05/2013"), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
+
+        edu.add(new LinkDateTextSection(new URL("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
+                format.parse("03/2011"), format.parse("04/2011"), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
+
+        edu.add(new LinkDateTextSection(new URL("http://www.siemens.ru/"), format.parse("01/2005"), format.parse("04/2005"), "3 месяца обучения мобильным IN сетям (Берлин)"));
+
+        edu.add(new LinkDateTextSection(new URL("http://www.alcatel.ru/"), format.parse("09/1997"), format.parse("03/1998"), "6 месяцев обучения цифровым телефонным сетям (Москва)"));
+
+        edu.add(new LinkDateTextSection(new URL("http://www.ifmo.ru/"), format.parse("09/1993"), format.parse("07/1996"), "Аспирантура (программист С, С++)\n" +
+                "09/1987 - 07/1993\tИнженер (программист Fortran, C)"));
+
+        edu.add(new LinkDateTextSection(new URL("http://www.school.mipt.ru/"), format.parse("09/1984"), format.parse("06/1987"), "Закончил с отличием"));
 
         System.out.println(resume.getFullName());
         System.out.println();
-        System.out.println(
+        System.out.println();
 
-        );
         for (Map.Entry<ContactType, String> pair : contacts.entrySet()) {
             System.out.println(pair.getKey().getTitle() + ": " + pair.getValue());
         }
