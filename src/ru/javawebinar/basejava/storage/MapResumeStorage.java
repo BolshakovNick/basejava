@@ -8,7 +8,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     private Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected boolean isResumeExist(Resume key) {
+    protected boolean isExist(Resume key) {
         return key != null;
     }
 

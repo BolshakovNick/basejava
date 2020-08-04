@@ -8,7 +8,7 @@ public class MapUuidStorage extends AbstractStorage<String> {
     private Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected boolean isResumeExist(String key) {
+    protected boolean isExist(String key) {
         return storage.containsKey(key);
     }
 

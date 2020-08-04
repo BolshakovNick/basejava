@@ -9,7 +9,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     private List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected boolean isResumeExist(Integer key) {
+    protected boolean isExist(Integer key) {
         return (Integer) key >= 0;
     }
 

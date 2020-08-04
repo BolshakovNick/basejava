@@ -22,7 +22,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract Integer getSearchKey(String uuid);
 
     @Override
-    protected boolean isResumeExist(Integer key) {
+    protected boolean isExist(Integer key) {
         return (Integer) key >= 0;
     }
 
