@@ -13,7 +13,7 @@ public class ResumeTestData {
     public static void main(String[] args) throws MalformedURLException, ParseException {
         Resume resume = new Resume("uuid1", "Григорий Кислин");
         Map<ContactType, String> contacts = resume.getContacts();
-        Map<SectionType, AbstractSection> content = resume.getContent();
+        Map<SectionType, AbstractSection> content = resume.getSections();
 
         contacts.put(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");

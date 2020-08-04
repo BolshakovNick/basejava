@@ -16,7 +16,7 @@ public class Resume implements Comparable<Resume> {
 
     //https://www.codeflow.site/ru/article/java-enum-map
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private Map<SectionType, AbstractSection> content = new EnumMap<>(SectionType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -45,8 +45,8 @@ public class Resume implements Comparable<Resume> {
         return contacts;
     }
 
-    public Map<SectionType, AbstractSection> getContent() {
-        return content;
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Resume implements Comparable<Resume> {
         if (!Objects.equals(uuid, resume.uuid)) return false;
         if (!Objects.equals(fullName, resume.fullName)) return false;
         if (!Objects.equals(contacts, resume.contacts)) return false;
-        return Objects.equals(content, resume.content);
+        return Objects.equals(sections, resume.sections);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Resume implements Comparable<Resume> {
         int result = uuid != null ? uuid.hashCode() : 0;
         result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (sections != null ? sections.hashCode() : 0);
         return result;
     }
 
