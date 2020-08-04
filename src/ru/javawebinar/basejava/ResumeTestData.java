@@ -5,8 +5,7 @@ import ru.javawebinar.basejava.model.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +27,8 @@ public class ResumeTestData {
         content.put(SectionType.PERSONAL, new SimpleTextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
         content.put(SectionType.ACHIEVEMENT, new MarkingListSection());
         content.put(SectionType.QUALIFICATIONS, new MarkingListSection());
-        content.put(SectionType.EXPERIENCE, new Experience());
-        content.put(SectionType.EDUCATION, new Education());
+        content.put(SectionType.EXPERIENCE, new OrganizationSection());
+        content.put(SectionType.EDUCATION, new OrganizationSection());
 
         List<String> achievements = ((MarkingListSection) content.get(SectionType.ACHIEVEMENT)).getMarkingLines();
 
@@ -72,43 +71,42 @@ public class ResumeTestData {
                 "функционального программирования");
         qualifications.add("Родной русский, английский \"upper intermediate\"");
 
-        List<LinkDateTextSection> exp = ((Experience) content.get(SectionType.EXPERIENCE)).getWorkList();
-        SimpleDateFormat format = new SimpleDateFormat("MM/yyyy");
+        List<Experience> exp = ((OrganizationSection) content.get(SectionType.EXPERIENCE)).getExperienceList();
 
-        exp.add(new LinkDateTextSection(new URL("http://javaops.ru/"), format.parse("10/2013"), new Date(), "Автор проекта.\n" +
+        exp.add(new Experience(new URL("http://javaops.ru/"), YearMonth.of(2013, 10), YearMonth.now(), "Автор проекта.\n" +
                 "Создание, организация и проведение Java онлайн проектов и стажировок."));
 
-        exp.add(new LinkDateTextSection(new URL("https://www.wrike.com/"), format.parse("10/2014"), format.parse("01/2016"), "Старший разработчик (backend)\n" +
+        exp.add(new Experience(new URL("https://www.wrike.com/"), YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Старший разработчик (backend)\n" +
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring,\n" +
                 "MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2,\n" +
                 "JWT SSO."));
 
-        exp.add(new LinkDateTextSection(new URL("http://www.luxoft.ru/"), format.parse("12/2010"), format.parse("04/2012"), "Ведущий программист" +
+        exp.add(new Experience(new URL("http://www.luxoft.ru/"), YearMonth.of(2010, 12), YearMonth.of(2012, 4), "Ведущий программист" +
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\n" +
                 "Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для\n" +
                 "администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring,\n" +
                 "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
 
-        exp.add(new LinkDateTextSection(new URL("https://www.yota.ru/"), format.parse("06/2008"), format.parse("12/2010"), "Ведущий специалист\n" +
+        exp.add(new Experience(new URL("https://www.yota.ru/"), YearMonth.of(2008, 6), YearMonth.of(2010, 12), "Ведущий специалист\n" +
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J,\n" +
                 "EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и\n" +
                 "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"));
 
-        List<LinkDateTextSection> edu = ((Education) content.get(SectionType.EDUCATION)).getEducationList();
+        List<Experience> edu = ((OrganizationSection) content.get(SectionType.EDUCATION)).getExperienceList();
 
-        edu.add(new LinkDateTextSection(new URL("https://www.coursera.org/course/progfun"), format.parse("03/2013"), format.parse("05/2013"), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
+        edu.add(new Experience(new URL("https://www.coursera.org/course/progfun"), YearMonth.of(2013, 3), YearMonth.of(2013, 5), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
 
-        edu.add(new LinkDateTextSection(new URL("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
-                format.parse("03/2011"), format.parse("04/2011"), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
+        edu.add(new Experience(new URL("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
+                YearMonth.of(2011, 3), YearMonth.of(2011, 4), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
 
-        edu.add(new LinkDateTextSection(new URL("http://www.siemens.ru/"), format.parse("01/2005"), format.parse("04/2005"), "3 месяца обучения мобильным IN сетям (Берлин)"));
+        edu.add(new Experience(new URL("http://www.siemens.ru/"), YearMonth.of(2005,1), YearMonth.of(2005,4), "3 месяца обучения мобильным IN сетям (Берлин)"));
 
-        edu.add(new LinkDateTextSection(new URL("http://www.alcatel.ru/"), format.parse("09/1997"), format.parse("03/1998"), "6 месяцев обучения цифровым телефонным сетям (Москва)"));
+        edu.add(new Experience(new URL("http://www.alcatel.ru/"), YearMonth.of(1997,9), YearMonth.of(1998, 3), "6 месяцев обучения цифровым телефонным сетям (Москва)"));
 
-        edu.add(new LinkDateTextSection(new URL("http://www.ifmo.ru/"), format.parse("09/1993"), format.parse("07/1996"), "Аспирантура (программист С, С++)\n" +
+        edu.add(new Experience(new URL("http://www.ifmo.ru/"), YearMonth.of(1993, 9), YearMonth.of(1996, 7), "Аспирантура (программист С, С++)\n" +
                 "09/1987 - 07/1993\tИнженер (программист Fortran, C)"));
 
-        edu.add(new LinkDateTextSection(new URL("http://www.school.mipt.ru/"), format.parse("09/1984"), format.parse("06/1987"), "Закончил с отличием"));
+        edu.add(new Experience(new URL("http://www.school.mipt.ru/"), YearMonth.of(1984, 9), YearMonth.of(1987, 6), "Закончил с отличием"));
 
         System.out.println(resume.getFullName());
         System.out.println();
