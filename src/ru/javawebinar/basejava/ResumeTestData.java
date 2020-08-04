@@ -1,10 +1,12 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.DateUtil;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,40 +75,40 @@ public class ResumeTestData {
 
         List<Organization> exp = ((OrganizationSection) content.get(SectionType.EXPERIENCE)).getOrganizations();
 
-        exp.add(new Organization("JavaOps", "http://javaops.ru/", LocalDate.of(2013, 10, 1), LocalDate.now(), "Автор проекта.",
+        exp.add(new Organization("JavaOps", "http://javaops.ru/", DateUtil.of(2013, Month.OCTOBER), LocalDate.now(), "Автор проекта.",
                 "Создание, организация и проведение Java онлайн проектов и стажировок."));
 
-        exp.add(new Organization("Wrike", "https://www.wrike.com/", LocalDate.of(2014, 10, 1), LocalDate.of(2016, 1, 1), "Старший разработчик (backend)",
+        exp.add(new Organization("Wrike", "https://www.wrike.com/", DateUtil.of(2014, Month.OCTOBER), DateUtil.of(2016, Month.JANUARY), "Старший разработчик (backend)",
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring,\n" +
                         "MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2,\n" +
                         "JWT SSO."));
 
-        exp.add(new Organization("Luxoft", "http://www.luxoft.ru/", LocalDate.of(2010, 12, 1), LocalDate.of(2012, 4, 1), "Ведущий программист",
+        exp.add(new Organization("Luxoft", "http://www.luxoft.ru/", DateUtil.of(2010, Month.DECEMBER), DateUtil.of(2012, Month.APRIL), "Ведущий программист",
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\n" +
                         "Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для\n" +
                         "администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring,\n" +
                         "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
 
-        exp.add(new Organization("Yota", "https://www.yota.ru/", LocalDate.of(2008, 6, 1), LocalDate.of(2010, 12, 1), "Ведущий специалист",
+        exp.add(new Organization("Yota", "https://www.yota.ru/", DateUtil.of(2008, Month.JUNE), DateUtil.of(2010, Month.DECEMBER), "Ведущий специалист",
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J,\n" +
                         "EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и\n" +
                         "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"));
 
         List<Organization> edu = ((OrganizationSection) content.get(SectionType.EDUCATION)).getOrganizations();
 
-        edu.add(new Organization("Coursera", "https://www.coursera.org/course/progfun", LocalDate.of(2013, 3, 1), LocalDate.of(2013, 5, 1), "\"Functional Programming Principles in Scala\" by Martin Odersky", null));
+        edu.add(new Organization("Coursera", "https://www.coursera.org/course/progfun", DateUtil.of(2013, Month.MARCH), DateUtil.of(2013, Month.MAY), "\"Functional Programming Principles in Scala\" by Martin Odersky", null));
 
         edu.add(new Organization("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
-                LocalDate.of(2011, 3, 1), LocalDate.of(2011, 4, 1), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", null));
+                DateUtil.of(2011, Month.MARCH), DateUtil.of(2011, Month.APRIL), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", null));
 
-        edu.add(new Organization("Siemens", "http://www.siemens.ru/", LocalDate.of(2005, 1, 1), LocalDate.of(2005, 4, 1), "3 месяца обучения мобильным IN сетям (Берлин)", null));
+        edu.add(new Organization("Siemens", "http://www.siemens.ru/", DateUtil.of(2005, Month.JANUARY), DateUtil.of(2005, Month.APRIL), "3 месяца обучения мобильным IN сетям (Берлин)", null));
 
-        edu.add(new Organization("Alcatel", "http://www.alcatel.ru/", LocalDate.of(1997, 9, 1), LocalDate.of(1998, 3, 1), "6 месяцев обучения цифровым телефонным сетям (Москва)", null));
+        edu.add(new Organization("Alcatel", "http://www.alcatel.ru/", DateUtil.of(1997, Month.SEPTEMBER), DateUtil.of(1998, Month.MARCH), "6 месяцев обучения цифровым телефонным сетям (Москва)", null));
 
-        edu.add(new Organization("Ifmo", "http://www.ifmo.ru/", LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1), "Аспирантура (программист С, С++)" , null));
-        edu.add(new Organization("Ifmo", "http://www.ifmo.ru/", LocalDate.of(1987, 9, 1), LocalDate.of(1993, 7, 1), "Инженер (программист Fortran, C)", null));
+        edu.add(new Organization("Ifmo", "http://www.ifmo.ru/", DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "Аспирантура (программист С, С++)" , null));
+        edu.add(new Organization("Ifmo", "http://www.ifmo.ru/",DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "Инженер (программист Fortran, C)", null));
 
-        edu.add(new Organization("School-mipt", "http://www.school.mipt.ru/", LocalDate.of(1984, 9, 1), LocalDate.of(1987, 6, 1), "Закончил с отличием", null));
+        edu.add(new Organization("School-mipt", "http://www.school.mipt.ru/", DateUtil.of(1984, Month.SEPTEMBER), DateUtil.of(1987, Month.JUNE), "Закончил с отличием", null));
 
         System.out.println(resume.getFullName());
         System.out.println();
