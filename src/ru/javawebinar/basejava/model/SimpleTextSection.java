@@ -3,17 +3,10 @@ package ru.javawebinar.basejava.model;
 import java.util.Objects;
 
 public class SimpleTextSection extends AbstractSection {
-    private String text;
+    private final String text;
 
     public SimpleTextSection(String text) {
-        this.text = text;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
+        Objects.requireNonNull(text, "text must not be null");
         this.text = text;
     }
 
@@ -29,11 +22,11 @@ public class SimpleTextSection extends AbstractSection {
 
         SimpleTextSection that = (SimpleTextSection) o;
 
-        return Objects.equals(text, that.text);
+        return text.equals(that.text);
     }
 
     @Override
     public int hashCode() {
-        return text != null ? text.hashCode() : 0;
+        return text.hashCode();
     }
 }

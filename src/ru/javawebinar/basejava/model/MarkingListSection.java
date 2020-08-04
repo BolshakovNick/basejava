@@ -2,10 +2,9 @@ package ru.javawebinar.basejava.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MarkingListSection extends AbstractSection {
-    private List<String> markingLines;
+    private final List<String> markingLines;
 
     public MarkingListSection() {
         this.markingLines = new ArrayList<>();
@@ -35,11 +34,11 @@ public class MarkingListSection extends AbstractSection {
 
         MarkingListSection that = (MarkingListSection) o;
 
-        return Objects.equals(markingLines, that.markingLines);
+        return markingLines.equals(that.markingLines);
     }
 
     @Override
     public int hashCode() {
-        return markingLines != null ? markingLines.hashCode() : 0;
+        return markingLines.hashCode();
     }
 }

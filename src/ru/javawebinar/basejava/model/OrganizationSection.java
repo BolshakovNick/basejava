@@ -1,18 +1,18 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection {
-    private List<Experience> experienceList = new ArrayList<>();
+    private final List<Organization> organizations;
 
-    public List<Experience> getExperienceList() {
-        return experienceList;
+    public OrganizationSection(List<Organization> organizations) {
+        Objects.requireNonNull(organizations, "organizations must not be null");
+        this.organizations = organizations;
     }
 
-    public void setExperienceList(List<Experience> experienceList) {
-        this.experienceList = experienceList;
+    public List<Organization> getOrganizations() {
+        return organizations;
     }
 
     @Override
@@ -22,18 +22,18 @@ public class OrganizationSection extends AbstractSection {
 
         OrganizationSection education = (OrganizationSection) o;
 
-        return Objects.equals(experienceList, education.experienceList);
+        return Objects.equals(organizations, education.organizations);
     }
 
     @Override
     public int hashCode() {
-        return experienceList != null ? experienceList.hashCode() : 0;
+        return organizations != null ? organizations.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Experience text : experienceList) {
+        for (Organization text : organizations) {
             sb.append(text.toString()).append('\n');
         }
         return sb.toString();
