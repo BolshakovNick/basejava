@@ -23,7 +23,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected boolean isExist(Integer key) {
-        return (Integer) key >= 0;
+        return key >= 0;
     }
 
     @Override
@@ -39,11 +39,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected void doSave(Integer key, Resume resume) {
-        int index = key;
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        saveToStorage(index, resume);
+        saveToStorage(key, resume);
         size++;
     }
 

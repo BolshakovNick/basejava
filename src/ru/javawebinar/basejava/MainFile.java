@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -36,21 +37,20 @@ public class MainFile {
         System.out.println();
         System.out.println();
 
-        FileRecursion(new File("C:\\Users\\Local\\IdeaProjects\\basejava\\src"));
+        fileRecursion(new File(".\\src"));
 
         System.out.println();
         System.out.println();
 
-        FileQueue(new File("C:\\Users\\Local\\IdeaProjects\\basejava\\src"));
+        fileQueue(new File(".\\src"));
     }
 
-    public static void FileRecursion(File dir) {
+    public static void fileRecursion(File dir) {
         if (dir != null) {
-
             if (dir.isDirectory()) {
-                for (File file : dir.listFiles()) {
+                for (File file : Objects.requireNonNull(dir.listFiles())) {
                     if (file.isDirectory()) {
-                        FileRecursion(file);
+                        fileRecursion(file);
                     } else
                         System.out.println(file.getName());
                 }
@@ -60,17 +60,16 @@ public class MainFile {
         }
     }
 
-    public static void FileQueue(File dir) {
+    public static void fileQueue(File dir) {
         if (dir != null) {
             Queue<File> files = new PriorityQueue<>();
             if (dir.isDirectory()) {
-                files.addAll(Arrays.asList(dir.listFiles()));
+                files.addAll(Arrays.asList(Objects.requireNonNull(dir.listFiles())));
             }
-
             while (!files.isEmpty()) {
                 File file = files.poll();
                 if (file.isDirectory()) {
-                    files.addAll(Arrays.asList(file.listFiles()));
+                    files.addAll(Arrays.asList(Objects.requireNonNull(file.listFiles())));
                 }
                 else {
                     System.out.println(file.getName());

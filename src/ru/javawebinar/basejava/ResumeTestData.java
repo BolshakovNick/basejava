@@ -105,8 +105,9 @@ public class ResumeTestData {
 
         edu.add(new Organization("Alcatel", "http://www.alcatel.ru/", DateUtil.of(1997, Month.SEPTEMBER), DateUtil.of(1998, Month.MARCH), "6 месяцев обучения цифровым телефонным сетям (Москва)", null));
 
-        edu.add(new Organization("Ifmo", "http://www.ifmo.ru/", DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "Аспирантура (программист С, С++)" , null));
-        edu.add(new Organization("Ifmo", "http://www.ifmo.ru/",DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "Инженер (программист Fortran, C)", null));
+        Organization org = new Organization("Ifmo", "http://www.ifmo.ru/", DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "Аспирантура (программист С, С++)" , null);
+        org.getItems().add(new Item(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "Инженер (программист Fortran, C)", null));
+        edu.add(org);
 
         edu.add(new Organization("School-mipt", "http://www.school.mipt.ru/", DateUtil.of(1984, Month.SEPTEMBER), DateUtil.of(1987, Month.JUNE), "Закончил с отличием", null));
 
