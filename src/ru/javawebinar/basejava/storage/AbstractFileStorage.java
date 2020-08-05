@@ -5,6 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +25,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     protected abstract void doWrite(Resume resume, File file) throws IOException;
 
+    protected abstract Resume doRead(File file) throws IOException;
+
+
     @Override
     protected File getSearchKey(String uuid) {
         return new File(directory, uuid);
@@ -41,17 +45,28 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     protected void doDelete(File file) {
-
+        if (!isExist(file)) {
+            throw new IllegalArgumentException(file.getAbsolutePath() + " is not exists");
+        }
+        file.delete();
     }
 
     @Override
     protected void doUpdate(File file, Resume resume) {
-
+        try {
+            doWrite(resume, file);
+        } catch (IOException e) {
+            throw new RuntimeException("Error", e);
+        }
     }
 
     @Override
-    protected Resume doGet(File file) {
-        return null;
+    protected Resume doGet(File file){
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Error", e);
+        }
     }
 
     @Override
@@ -61,16 +76,22 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     protected List<Resume> getList() {
-        return null;
+        List<Resume> result = new ArrayList<>();
+        for (File file : directory.listFiles()) {
+            result.add(doGet(file));
+        }
+        return result;
     }
 
     @Override
     public void clear() {
-
+        for (File file : Objects.requireNonNull(directory.listFiles(), "null directory is not available to clear")) {
+            file.delete();
+        }
     }
 
     @Override
     public int size() {
-        return 0;
+        return Objects.requireNonNull(directory.list(), "null directory does not have size").length;
     }
 }
