@@ -3,14 +3,17 @@ package ru.javawebinar.basejava.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Item {
+public class Experience {
 
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final String title;
     private final String description;
 
-    public Item(LocalDate startDate, LocalDate endDate, String title, String description) {
+    public Experience(LocalDate startDate, LocalDate endDate, String title, String description) {
+        Objects.requireNonNull(startDate, "startDate must not be null");
+        Objects.requireNonNull(endDate, "endDate must not be null");
+        Objects.requireNonNull(title, "title must not be null");
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
@@ -22,12 +25,12 @@ public class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Item item = (Item) o;
+        Experience experience = (Experience) o;
 
-        if (!startDate.equals(item.startDate)) return false;
-        if (!endDate.equals(item.endDate)) return false;
-        if (!title.equals(item.title)) return false;
-        return Objects.equals(description, item.description);
+        if (!startDate.equals(experience.startDate)) return false;
+        if (!endDate.equals(experience.endDate)) return false;
+        if (!title.equals(experience.title)) return false;
+        return Objects.equals(description, experience.description);
     }
 
     @Override

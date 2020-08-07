@@ -1,28 +1,25 @@
 package ru.javawebinar.basejava.model;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Organization extends AbstractSection {
     private final Link homePage;
 
-    private List<Item> items;
+    private List<Experience> experiences;
 
-    public Organization(String name, String url, LocalDate startDate, LocalDate endDate, String title, String description) {
-        Objects.requireNonNull(startDate, "startDate must not be null");
-        Objects.requireNonNull(endDate, "endDate must not be null");
-        Objects.requireNonNull(title, "title must not be null");
-        this.homePage = new Link(name, url);
-        items.add(new Item(startDate, endDate, title, description));
+    public Organization(Link link, Experience experience) {
+        experiences = new ArrayList<>();
+        this.homePage = link;
+        experiences.add(experience);
     }
 
     public Link getHomePage() {
         return homePage;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Experience> getExperiences() {
+        return experiences;
     }
 
     @Override
@@ -33,13 +30,13 @@ public class Organization extends AbstractSection {
         Organization that = (Organization) o;
 
         if (!homePage.equals(that.homePage)) return false;
-        return items.equals(that.items);
+        return experiences.equals(that.experiences);
     }
 
     @Override
     public int hashCode() {
         int result = homePage.hashCode();
-        result = 31 * result + items.hashCode();
+        result = 31 * result + experiences.hashCode();
         return result;
     }
 
@@ -47,7 +44,7 @@ public class Organization extends AbstractSection {
     public String toString() {
         return "Organization{" +
                 "homePage=" + homePage +
-                ", items=" + items +
+                ", items=" + experiences +
                 '}';
     }
 }

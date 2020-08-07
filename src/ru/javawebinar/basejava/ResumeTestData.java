@@ -75,41 +75,42 @@ public class ResumeTestData {
 
         List<Organization> exp = ((OrganizationSection) content.get(SectionType.EXPERIENCE)).getOrganizations();
 
-        exp.add(new Organization("JavaOps", "http://javaops.ru/", DateUtil.of(2013, Month.OCTOBER), LocalDate.now(), "Автор проекта.",
-                "Создание, организация и проведение Java онлайн проектов и стажировок."));
+        exp.add(new Organization(new Link("JavaOps", "http://javaops.ru/"), new Experience(DateUtil.of(2013, Month.OCTOBER), LocalDate.now(), "Автор проекта.",
+                "Создание, организация и проведение Java онлайн проектов и стажировок.")));
 
-        exp.add(new Organization("Wrike", "https://www.wrike.com/", DateUtil.of(2014, Month.OCTOBER), DateUtil.of(2016, Month.JANUARY), "Старший разработчик (backend)",
+        exp.add(new Organization(new Link ("Wrike", "https://www.wrike.com/"), new Experience(DateUtil.of(2014, Month.OCTOBER), DateUtil.of(2016, Month.JANUARY), "Старший разработчик (backend)",
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring,\n" +
                         "MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2,\n" +
-                        "JWT SSO."));
+                        "JWT SSO.")));
 
-        exp.add(new Organization("Luxoft", "http://www.luxoft.ru/", DateUtil.of(2010, Month.DECEMBER), DateUtil.of(2012, Month.APRIL), "Ведущий программист",
+        exp.add(new Organization(new Link("Luxoft", "http://www.luxoft.ru/"), new Experience(DateUtil.of(2010, Month.DECEMBER), DateUtil.of(2012, Month.APRIL), "Ведущий программист",
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\n" +
                         "Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для\n" +
                         "администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring,\n" +
-                        "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
+                        "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.")));
 
-        exp.add(new Organization("Yota", "https://www.yota.ru/", DateUtil.of(2008, Month.JUNE), DateUtil.of(2010, Month.DECEMBER), "Ведущий специалист",
+        exp.add(new Organization(new Link("Yota", "https://www.yota.ru/"), new Experience(DateUtil.of(2008, Month.JUNE), DateUtil.of(2010, Month.DECEMBER), "Ведущий специалист",
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J,\n" +
                         "EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и\n" +
-                        "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"));
+                        "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)")));
 
         List<Organization> edu = ((OrganizationSection) content.get(SectionType.EDUCATION)).getOrganizations();
 
-        edu.add(new Organization("Coursera", "https://www.coursera.org/course/progfun", DateUtil.of(2013, Month.MARCH), DateUtil.of(2013, Month.MAY), "\"Functional Programming Principles in Scala\" by Martin Odersky", null));
+        edu.add(new Organization(new Link("Coursera", "https://www.coursera.org/course/progfun"), new Experience(DateUtil.of(2013, Month.MARCH), DateUtil.of(2013, Month.MAY), "\"Functional Programming Principles in Scala\" by Martin Odersky", null)));
 
-        edu.add(new Organization("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
-                DateUtil.of(2011, Month.MARCH), DateUtil.of(2011, Month.APRIL), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", null));
+        edu.add(new Organization(new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
+                new Experience(DateUtil.of(2011, Month.MARCH), DateUtil.of(2011, Month.APRIL), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", null)));
 
-        edu.add(new Organization("Siemens", "http://www.siemens.ru/", DateUtil.of(2005, Month.JANUARY), DateUtil.of(2005, Month.APRIL), "3 месяца обучения мобильным IN сетям (Берлин)", null));
+        edu.add(new Organization(new Link("Siemens", "http://www.siemens.ru/"), new Experience(DateUtil.of(2005, Month.JANUARY), DateUtil.of(2005, Month.APRIL), "3 месяца обучения мобильным IN сетям (Берлин)", null)));
 
-        edu.add(new Organization("Alcatel", "http://www.alcatel.ru/", DateUtil.of(1997, Month.SEPTEMBER), DateUtil.of(1998, Month.MARCH), "6 месяцев обучения цифровым телефонным сетям (Москва)", null));
+        edu.add(new Organization(new Link("Alcatel", "http://www.alcatel.ru/"), new Experience(DateUtil.of(1997, Month.SEPTEMBER), DateUtil.of(1998, Month.MARCH), "6 месяцев обучения цифровым телефонным сетям (Москва)", null)));
 
-        Organization org = new Organization("Ifmo", "http://www.ifmo.ru/", DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "Аспирантура (программист С, С++)" , null);
-        org.getItems().add(new Item(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "Инженер (программист Fortran, C)", null));
+        Link link = new Link("Ifmo", "http://www.ifmo.ru/");
+        Organization org = new Organization(link, new Experience(DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "Аспирантура (программист С, С++)" , null));
+        org.getExperiences().add(new Experience(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "Инженер (программист Fortran, C)", null));
         edu.add(org);
 
-        edu.add(new Organization("School-mipt", "http://www.school.mipt.ru/", DateUtil.of(1984, Month.SEPTEMBER), DateUtil.of(1987, Month.JUNE), "Закончил с отличием", null));
+        edu.add(new Organization(new Link("School-mipt", "http://www.school.mipt.ru/"), new Experience(DateUtil.of(1984, Month.SEPTEMBER), DateUtil.of(1987, Month.JUNE), "Закончил с отличием", null)));
 
         System.out.println(resume.getFullName());
         System.out.println();
@@ -158,16 +159,16 @@ public class ResumeTestData {
         qualifications.add("qualification 3");
 
         List<Organization> exp = ((OrganizationSection) content.get(SectionType.EXPERIENCE)).getOrganizations();
-        exp.add(new Organization("EXP-Organization 1", "http://organization1.ru/", DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EXP-Title1",
-                "EXP-Description1"));
-        exp.add(new Organization("EXP-Organization 2", "http://organization2.ru/", DateUtil.of(2005, Month.JANUARY), DateUtil.of(2007, Month.JANUARY), "EXP-Title2",
-                "EXP-Description2"));
+        exp.add(new Organization(new Link("EXP-Organization 1", "http://organization1.ru/"), new Experience(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EXP-Title1",
+                "EXP-Description1")));
+        exp.add(new Organization(new Link("EXP-Organization 2", "http://organization2.ru/"), new Experience(DateUtil.of(2005, Month.JANUARY), DateUtil.of(2007, Month.JANUARY), "EXP-Title2",
+                "EXP-Description2")));
 
         List<Organization> edu = ((OrganizationSection) content.get(SectionType.EDUCATION)).getOrganizations();
-        edu.add(new Organization("EDU-Organization 1", "http://edu-organization1.ru/", DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title1",
-                "EDU-Description1"));
-        edu.add(new Organization("EDU-Organization 2", "http://edu-organization2.ru/", DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title2",
-                "EDU-Description2"));
+        edu.add(new Organization(new Link("EDU-Organization 1", "http://edu-organization1.ru/"), new Experience(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title1",
+                "EDU-Description1")));
+        edu.add(new Organization(new Link("EDU-Organization 2", "http://edu-organization2.ru/"), new Experience(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title2",
+                "EDU-Description2")));
 
         return resume;
     }
