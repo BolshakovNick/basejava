@@ -39,14 +39,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
             file.createNewFile();
             doWrite(resume, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
+        doUpdate(file, resume);
     }
 
     @Override
     protected void doDelete(File file) {
         if (!isExist(file)) {
-            throw new IllegalArgumentException(file.getAbsolutePath() + " is not exists");
+            throw new StorageException("File delete error", file.getName());
         }
         file.delete();
     }
@@ -56,7 +57,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
         try {
             doWrite(resume, file);
         } catch (IOException e) {
-            throw new RuntimeException("Error", e);
+            throw new StorageException("File write error ", resume.getUuid(), e);
         }
     }
 
@@ -65,7 +66,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
         try {
             return doRead(file);
         } catch (IOException e) {
-            throw new RuntimeException("Error", e);
+            throw new StorageException("File read error", file.getName(), e);
         }
     }
 
@@ -76,8 +77,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     protected List<Resume> getList() {
-        List<Resume> result = new ArrayList<>();
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
+        File [] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        List<Resume> result = new ArrayList<>(files.length);
+        for (File file : files) {
             result.add(doGet(file));
         }
         return result;
@@ -85,8 +90,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     public void clear() {
-        for (File file : Objects.requireNonNull(directory.listFiles(), "null directory is not available to clear")) {
-            file.delete();
+        File [] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                doDelete(file);
+            }
         }
     }
 

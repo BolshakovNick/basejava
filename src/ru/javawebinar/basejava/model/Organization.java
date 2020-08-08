@@ -1,25 +1,34 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.DateUtil;
+
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Organization extends AbstractSection {
     private final Link homePage;
 
-    private List<Experience> experiences;
+    private List<Position> positions = new ArrayList<>();
 
-    public Organization(Link link, Experience experience) {
-        experiences = new ArrayList<>();
+    public Organization(Link link, List<Position> positions) {
         this.homePage = link;
-        experiences.add(experience);
+        this.positions = positions;
+    }
+
+    public Organization(String name, String url, Position... positions){
+        this(new Link(name, url), Arrays.asList(positions));
     }
 
     public Link getHomePage() {
         return homePage;
     }
 
-    public List<Experience> getExperiences() {
-        return experiences;
+    public List<Position> getPositions() {
+        return positions;
     }
 
     @Override
@@ -30,13 +39,13 @@ public class Organization extends AbstractSection {
         Organization that = (Organization) o;
 
         if (!homePage.equals(that.homePage)) return false;
-        return experiences.equals(that.experiences);
+        return positions.equals(that.positions);
     }
 
     @Override
     public int hashCode() {
         int result = homePage.hashCode();
-        result = 31 * result + experiences.hashCode();
+        result = 31 * result + positions.hashCode();
         return result;
     }
 
@@ -44,7 +53,65 @@ public class Organization extends AbstractSection {
     public String toString() {
         return "Organization{" +
                 "homePage=" + homePage +
-                ", items=" + experiences +
+                ", items=" + positions +
                 '}';
+    }
+
+    public static class Position {
+
+        private final LocalDate startDate;
+        private final LocalDate endDate;
+        private final String title;
+        private final String description;
+
+        public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
+            Objects.requireNonNull(startDate, "startDate must not be null");
+            Objects.requireNonNull(endDate, "endDate must not be null");
+            Objects.requireNonNull(title, "title must not be null");
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.title = title;
+            this.description = description;
+        }
+
+        public Position(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+            this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), title, description);
+        }
+
+        public Position(int startYear, Month startMonth, String title, String description) {
+            this(DateUtil.of(startYear, startMonth), DateUtil.NOW, title, description);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Position position = (Position) o;
+
+            if (!startDate.equals(position.startDate)) return false;
+            if (!endDate.equals(position.endDate)) return false;
+            if (!title.equals(position.title)) return false;
+            return Objects.equals(description, position.description);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = startDate.hashCode();
+            result = 31 * result + endDate.hashCode();
+            result = 31 * result + title.hashCode();
+            result = 31 * result + (description != null ? description.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Item{" +
+                    "startDate=" + startDate +
+                    ", endDate=" + endDate +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    '}';
+        }
     }
 }

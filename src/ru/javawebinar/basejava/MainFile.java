@@ -50,9 +50,10 @@ public class MainFile {
             if (dir.isDirectory()) {
                 for (File file : Objects.requireNonNull(dir.listFiles())) {
                     if (file.isDirectory()) {
+                        System.out.println("directory: " + file.getName());
                         fileRecursion(file);
                     } else
-                        System.out.println(file.getName());
+                        System.out.println("\tfile: " + file.getName());
                 }
             } else {
                 System.out.println(dir.getName());

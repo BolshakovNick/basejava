@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MarkingListSection extends AbstractSection {
@@ -8,6 +9,14 @@ public class MarkingListSection extends AbstractSection {
 
     public MarkingListSection() {
         this.markingLines = new ArrayList<>();
+    }
+
+    public MarkingListSection(List<String> markingLines) {
+        this.markingLines = markingLines;
+    }
+
+    public MarkingListSection(String... markingLines) {
+        this(Arrays.asList(markingLines));
     }
 
     public List<String> getMarkingLines() {
