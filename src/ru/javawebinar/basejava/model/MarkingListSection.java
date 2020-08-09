@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MarkingListSection extends AbstractSection {
+    private static final long serialVersionUID = 1L;
+
     private final List<String> markingLines;
 
     public MarkingListSection() {
