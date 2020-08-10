@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File>{
+public abstract class AbstractFileStorage extends AbstractStorage<File> implements SourceStrategy<File>, ReadWriteInterface{
     private File directory;
 
     protected AbstractFileStorage(File directory) {
@@ -22,18 +22,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
         this.directory = directory;
     }
 
-    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
-
-
     @Override
-    protected File getSearchKey(String uuid) {
+    public File getSearchKey(String uuid) {
         return new File(directory, uuid);
     }
 
     @Override
-    protected void doSave(File file, Resume resume) {
+    public void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
             doWrite(resume, new FileOutputStream(file));
@@ -44,7 +39,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     }
 
     @Override
-    protected void doDelete(File file) {
+    public void doDelete(File file) {
         if (!isExist(file)) {
             throw new StorageException("File delete error", file.getName());
         }
@@ -52,7 +47,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     }
 
     @Override
-    protected void doUpdate(File file, Resume resume) {
+    public void doUpdate(File file, Resume resume) {
         try {
             doWrite(resume, new FileOutputStream(file));
         } catch (IOException e) {
@@ -61,7 +56,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     }
 
     @Override
-    protected Resume doGet(File file){
+    public Resume doGet(File file){
         try {
             return doRead(new FileInputStream(file));
         } catch (IOException e) {
@@ -70,12 +65,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     }
 
     @Override
-    protected boolean isExist(File file) {
+    public boolean isExist(File file) {
         return file.exists();
     }
 
     @Override
-    protected List<Resume> getList() {
+    public List<Resume> getList() {
         File [] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("Directory read error", null);

@@ -37,26 +37,23 @@ public class MainFile {
         System.out.println();
         System.out.println();
 
-        fileRecursion(new File(".\\src"));
+        fileRecursion(new File(".\\src"), "");
 
-        System.out.println();
-        System.out.println();
+        //System.out.println();
+        //System.out.println();
 
-        fileQueue(new File(".\\src"));
+        //fileQueue(new File(".\\src"));
     }
 
-    public static void fileRecursion(File dir) {
-        if (dir != null) {
-            if (dir.isDirectory()) {
-                for (File file : Objects.requireNonNull(dir.listFiles())) {
-                    if (file.isDirectory()) {
-                        System.out.println("directory: " + file.getName());
-                        fileRecursion(file);
-                    } else
-                        System.out.println("\tfile: " + file.getName());
-                }
-            } else {
-                System.out.println(dir.getName());
+    public static void fileRecursion(File dir, String indent) {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    System.out.println(indent + "directory: " + file.getName());
+                    fileRecursion(file, indent + '\t');
+                } else
+                    System.out.println(indent + "file: " + file.getName());
             }
         }
     }
@@ -71,8 +68,7 @@ public class MainFile {
                 File file = files.poll();
                 if (file.isDirectory()) {
                     files.addAll(Arrays.asList(Objects.requireNonNull(file.listFiles())));
-                }
-                else {
+                } else {
                     System.out.println(file.getName());
                 }
             }
