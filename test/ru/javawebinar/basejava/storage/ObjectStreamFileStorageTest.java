@@ -5,6 +5,6 @@ import java.io.File;
 public class ObjectStreamFileStorageTest extends AbstractStorageTest {
 
     public ObjectStreamFileStorageTest() {
-        super(new ObjectStreamStorage(new File(STORAGE_DIR)));
+        super(new ObjectStreamFileStorage(new File(STORAGE_DIR), new StandardSerializationStrategy()));
     }
 }
