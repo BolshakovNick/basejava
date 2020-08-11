@@ -59,12 +59,8 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() {
-        try {
-            storage.delete(UUID_1);
-            Assert.assertEquals(2, storage.size());
-        } catch (NotExistStorageException exception) {
-            Assert.fail("Exception in block try - Method delete()");
-        }
+        storage.delete(UUID_1);
+        Assert.assertEquals(2, storage.size());
         storage.get(UUID_1);
     }
 
@@ -77,7 +73,7 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume resume = new Resume(UUID_1, "new name");
         storage.update(resume);
-        Assert.assertTrue(storage.get(UUID_1).equals(resume));
+        Assert.assertEquals(storage.get(UUID_1), resume);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -105,9 +101,8 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        Resume r4 = new Resume("uuid4", "random name");
-        storage.save(r4);
-        Assert.assertEquals(r4, storage.get("uuid4"));
+        storage.save(RESUME_4);
+        Assert.assertEquals(RESUME_4, storage.get("uuid4"));
     }
 
     @Test(expected = NotExistStorageException.class)

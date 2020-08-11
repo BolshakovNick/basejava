@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.strategy.ReadWriteStrategy;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,19 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
+    private ReadWriteStrategy strategy;
 
-    protected abstract void doWrite(Resume resume, FileOutputStream stream) throws IOException;
-
-    protected abstract Resume doRead(FileInputStream stream) throws IOException;
-
-    protected AbstractPathStorage(String dir) {
+    protected PathStorage(String dir, ReadWriteStrategy strategy) {
         directory = Paths.get(dir);
+        this.strategy = strategy;
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
+    }
+
+    protected void doWrite(Resume resume, FileOutputStream stream) throws IOException {
+        strategy.doWrite(resume, stream);
+    }
+
+    protected Resume doRead(FileInputStream stream) throws IOException {
+        return strategy.doRead(stream);
     }
 
     @Override
