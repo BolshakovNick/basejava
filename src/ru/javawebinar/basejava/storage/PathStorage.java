@@ -27,14 +27,6 @@ public class PathStorage extends AbstractStorage<Path> {
         }
     }
 
-    protected void doWrite(Resume resume, FileOutputStream stream) throws IOException {
-        strategy.doWrite(resume, stream);
-    }
-
-    protected Resume doRead(FileInputStream stream) throws IOException {
-        return strategy.doRead(stream);
-    }
-
     @Override
     public void clear() {
         try {
@@ -61,7 +53,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public void doUpdate(Path path, Resume resume) {
         try {
-            doWrite(resume, new FileOutputStream(path.toFile()));
+            strategy.doWrite(resume, new FileOutputStream(path.toFile()));
         } catch (IOException e) {
             throw new StorageException("File write error ", resume.getUuid(), e);
         }
@@ -85,7 +77,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public Resume doGet(Path path) {
         try {
-            return doRead(new FileInputStream(path.toFile()));
+            return strategy.doRead(new FileInputStream(path.toFile()));
         } catch (IOException e) {
             throw new StorageException("Path read error", path.getFileName().toString(), e);
         }

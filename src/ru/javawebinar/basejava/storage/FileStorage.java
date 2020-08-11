@@ -26,14 +26,6 @@ public class FileStorage extends AbstractStorage<File> {
         this.strategy = strategy;
     }
 
-    protected void doWrite(Resume resume, FileOutputStream stream) throws IOException {
-        strategy.doWrite(resume, stream);
-    }
-
-    protected Resume doRead(FileInputStream stream) throws IOException {
-        return strategy.doRead(stream);
-    }
-
     @Override
     public File getSearchKey(String uuid) {
         return new File(directory, uuid);
@@ -43,7 +35,7 @@ public class FileStorage extends AbstractStorage<File> {
     public void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
-            doWrite(resume, new FileOutputStream(file));
+            strategy.doWrite(resume, new FileOutputStream(file));
         } catch (IOException e) {
             throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
@@ -61,7 +53,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public void doUpdate(File file, Resume resume) {
         try {
-            doWrite(resume, new FileOutputStream(file));
+            strategy.doWrite(resume, new FileOutputStream(file));
         } catch (IOException e) {
             throw new StorageException("File write error ", resume.getUuid(), e);
         }
@@ -70,7 +62,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public Resume doGet(File file) {
         try {
-            return doRead(new FileInputStream(file));
+            return strategy.doRead(new FileInputStream(file));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }
