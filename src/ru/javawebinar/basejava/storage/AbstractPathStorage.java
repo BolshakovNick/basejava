@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> implements SourceStrategy<Path>, ReadWriteInterface {
+public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private Path directory;
+
+    protected abstract void doWrite(Resume resume, FileOutputStream stream) throws IOException;
+
+    protected abstract Resume doRead(FileInputStream stream) throws IOException;
 
     protected AbstractPathStorage(String dir) {
         directory = Paths.get(dir);

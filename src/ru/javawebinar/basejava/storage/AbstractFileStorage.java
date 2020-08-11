@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> implements SourceStrategy<File>, ReadWriteInterface{
+public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private File directory;
+
+    protected abstract void doWrite(Resume resume, FileOutputStream stream) throws IOException;
+
+    protected abstract Resume doRead(FileInputStream stream) throws IOException;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -56,13 +60,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
     }
 
     @Override
-    public Resume doGet(File file){
+    public Resume doGet(File file) {
         try {
             return doRead(new FileInputStream(file));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }
     }
+
 
     @Override
     public boolean isExist(File file) {
@@ -71,7 +76,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
 
     @Override
     public List<Resume> getList() {
-        File [] files = directory.listFiles();
+        File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("Directory read error", null);
         }
@@ -84,7 +89,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
 
     @Override
     public void clear() {
-        File [] files = directory.listFiles();
+        File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 doDelete(file);
