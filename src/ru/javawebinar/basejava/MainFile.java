@@ -37,7 +37,7 @@ public class MainFile {
         System.out.println();
         System.out.println();
 
-        fileRecursion(new File(".\\src"));
+        fileRecursion(new File(".\\src"), "");
 
         System.out.println();
         System.out.println();
@@ -45,15 +45,15 @@ public class MainFile {
         fileQueue(new File(".\\src"));
     }
 
-    public static void fileRecursion(File dir) {
+    public static void fileRecursion(File dir, String indent) {
         if (dir != null) {
             if (dir.isDirectory()) {
                 for (File file : Objects.requireNonNull(dir.listFiles())) {
                     if (file.isDirectory()) {
-                        System.out.println("directory: " + file.getName());
-                        fileRecursion(file);
+                        System.out.println(indent + "directory: " + file.getName());
+                        fileRecursion(file, indent + "\t");
                     } else
-                        System.out.println("\tfile: " + file.getName());
+                        System.out.println(indent + "file: " + file.getName());
                 }
             } else {
                 System.out.println(dir.getName());
