@@ -35,7 +35,6 @@ public class FileStorage extends AbstractStorage<File> {
     public void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
-            strategy.doWrite(resume, new FileOutputStream(file));
         } catch (IOException e) {
             throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
@@ -44,16 +43,15 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void doDelete(File file) {
-        if (!isExist(file)) {
+        if (!file.delete()) {
             throw new StorageException("File delete error", file.getName());
         }
-        file.delete();
     }
 
     @Override
     public void doUpdate(File file, Resume resume) {
         try {
-            strategy.doWrite(resume, new FileOutputStream(file));
+            strategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File write error ", resume.getUuid(), e);
         }
@@ -62,7 +60,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public Resume doGet(File file) {
         try {
-            return strategy.doRead(new FileInputStream(file));
+            return strategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }
@@ -76,9 +74,9 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public List<Resume> getList() {
-        File[] files = directory.listFiles();
+        File[] files = getListFiles();
         if (files == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         }
         List<Resume> result = new ArrayList<>(files.length);
         for (File file : files) {
@@ -89,7 +87,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
+        File[] files = getListFiles();
         if (files != null) {
             for (File file : files) {
                 doDelete(file);
@@ -99,6 +97,12 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return Objects.requireNonNull(directory.list(), "null directory does not have size").length;
+        return getListFiles().length;
+    }
+
+    private File[] getListFiles() {
+        File[] result = directory.listFiles();
+        if (result == null) throw new StorageException("File list must not be null");
+        return result;
     }
 }

@@ -4,8 +4,8 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.strategy.ReadWriteStrategy;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
@@ -29,20 +30,12 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
-        }
+        getStream().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        try {
-            return (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
-        }
+        return (int) getStream().count();
     }
 
     @Override
@@ -53,7 +46,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public void doUpdate(Path path, Resume resume) {
         try {
-            strategy.doWrite(resume, new FileOutputStream(path.toFile()));
+            strategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("File write error ", resume.getUuid(), e);
         }
@@ -77,7 +70,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public Resume doGet(Path path) {
         try {
-            return strategy.doRead(new FileInputStream(path.toFile()));
+            return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path read error", path.getFileName().toString(), e);
         }
@@ -94,12 +87,16 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public List<Resume> getList() {
+        List<Resume> result = new ArrayList<>();
+        getStream().forEach(path -> result.add(doGet(path)));
+        return result;
+    }
+
+    private Stream<Path> getStream() {
         try {
-            List<Resume> result = new ArrayList<>();
-            Files.list(directory).forEach(path -> result.add(doGet(path)));
-            return result;
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("File get error", directory.getFileName().toString());
+            throw new StorageException("get stream error", directory.getFileName().toString());
         }
     }
 }
