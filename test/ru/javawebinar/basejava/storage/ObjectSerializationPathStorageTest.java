@@ -1,8 +1,6 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.storage.strategy.ObjectSerializationStrategy;
-
-import static org.junit.Assert.*;
+import ru.javawebinar.basejava.storage.serializer.ObjectSerializationStrategy;
 
 public class ObjectSerializationPathStorageTest extends AbstractStorageTest {
 

@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.strategy.ReadWriteStrategy;
+import ru.javawebinar.basejava.storage.serializer.SerializeStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
-    private ReadWriteStrategy strategy;
+    private SerializeStrategy strategy;
 
-    protected FileStorage(File directory, ReadWriteStrategy strategy) {
+    protected FileStorage(File directory, SerializeStrategy strategy) {
         Objects.requireNonNull(directory, "directory must not be null");
         Objects.requireNonNull(strategy, "strategy must not be null");
         if (!directory.isDirectory()) {

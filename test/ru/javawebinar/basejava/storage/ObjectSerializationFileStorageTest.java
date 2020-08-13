@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.storage.strategy.ObjectSerializationStrategy;
+import ru.javawebinar.basejava.storage.serializer.ObjectSerializationStrategy;
 
 import java.io.File;
 
