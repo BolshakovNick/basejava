@@ -4,10 +4,7 @@ import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.util.DateUtil;
 
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -158,15 +155,15 @@ public class ResumeTestData {
         qualifications.add("qualification 3");
 
         List<Organization> exp = ((OrganizationSection) content.get(SectionType.EXPERIENCE)).getOrganizations();
-        exp.add(new Organization(new Link("EXP-Organization 1", "http://organization1.ru/"), Arrays.asList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EXP-Title1",
+        exp.add(new Organization(new Link("EXP-Organization 1", "http://organization1.ru/"), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EXP-Title1",
                 "EXP-Description1"))));
-        exp.add(new Organization(new Link("EXP-Organization 2", "http://organization2.ru/"), Arrays.asList(new Organization.Position(DateUtil.of(2005, Month.JANUARY), DateUtil.of(2007, Month.JANUARY), "EXP-Title2",
+        exp.add(new Organization(new Link("EXP-Organization 2", "http://organization2.ru/"), Collections.singletonList(new Organization.Position(DateUtil.of(2005, Month.JANUARY), DateUtil.of(2007, Month.JANUARY), "EXP-Title2",
                 "EXP-Description2"))));
 
         List<Organization> edu = ((OrganizationSection) content.get(SectionType.EDUCATION)).getOrganizations();
-        edu.add(new Organization(new Link("EDU-Organization 1", "http://edu-organization1.ru/"), Arrays.asList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title1",
+        edu.add(new Organization(new Link("EDU-Organization 1", "http://edu-organization1.ru/"), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title1",
                 "EDU-Description1"))));
-        edu.add(new Organization(new Link("EDU-Organization 2", "http://edu-organization2.ru/"), Arrays.asList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title2",
+        edu.add(new Organization(new Link("EDU-Organization 2", "http://edu-organization2.ru/"), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title2",
                 "EDU-Description2"))));
 
         return resume;
