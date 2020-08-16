@@ -123,6 +123,52 @@ public class ResumeTestData {
         }
     }
 
+    public static Resume nullPointsTestResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+
+        Map<ContactType, String> contacts = resume.getContacts();
+        Map<SectionType, AbstractSection> content = resume.getSections();
+
+        contacts.put(ContactType.PHONE_NUMBER, "+7(987) 654-3210");
+        contacts.put(ContactType.SKYPE, "example.skype");
+        contacts.put(ContactType.MAIL, "example@yandex.ru");
+        contacts.put(ContactType.LINKED_IN, "https://www.linkedin.com/in/example");
+        contacts.put(ContactType.GITHUB, "https://github.com/example");
+        contacts.put(ContactType.STACK_OVERFLOW, "https://stackoverflow.com/users/11111");
+        contacts.put(ContactType.HOME_PAGE, "http://example.ru/");
+
+        content.put(SectionType.OBJECTIVE, new SimpleTextSection("test objective"));
+        content.put(SectionType.PERSONAL, new SimpleTextSection("test personal"));
+        content.put(SectionType.ACHIEVEMENT, new MarkingListSection());
+        content.put(SectionType.QUALIFICATIONS, new MarkingListSection());
+        content.put(SectionType.EXPERIENCE, new OrganizationSection(new ArrayList<>()));
+        content.put(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>()));
+
+        List<String> achievements = ((MarkingListSection) content.get(SectionType.ACHIEVEMENT)).getMarkingLines();
+        achievements.add("achievement 1");
+        achievements.add("achievement 2");
+        achievements.add("achievement 3");
+
+        List<String> qualifications = ((MarkingListSection) content.get(SectionType.QUALIFICATIONS)).getMarkingLines();
+        qualifications.add("qualification 1");
+        qualifications.add("qualification 2");
+        qualifications.add("qualification 3");
+
+        List<Organization> exp = ((OrganizationSection) content.get(SectionType.EXPERIENCE)).getOrganizations();
+        exp.add(new Organization(new Link("EXP-Organization 1", null), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EXP-Title1",
+                null))));
+        exp.add(new Organization(new Link("EXP-Organization 2", null), Collections.singletonList(new Organization.Position(DateUtil.of(2005, Month.JANUARY), DateUtil.of(2007, Month.JANUARY), "EXP-Title2",
+                null))));
+
+        List<Organization> edu = ((OrganizationSection) content.get(SectionType.EDUCATION)).getOrganizations();
+        edu.add(new Organization(new Link("EDU-Organization 1", null), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title1",
+                null))));
+        edu.add(new Organization(new Link("EDU-Organization 2", null), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title2",
+                null))));
+
+        return resume;
+    }
+
     public static Resume testResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 

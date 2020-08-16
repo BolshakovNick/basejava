@@ -7,6 +7,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -35,22 +36,15 @@ public class DataSerializationStrategy implements SerializeStrategy {
                 } else if (sectionType.equals(SectionType.ACHIEVEMENT) || sectionType.equals(SectionType.QUALIFICATIONS)) {
                     dos.writeUTF(sectionType.name());
                     List<String> list = ((MarkingListSection) section).getMarkingLines();
-                    dos.writeInt(list.size());
-                    for (String element : list) {
-                        dos.writeUTF(element);
-                    }
+                    writeCollection(dos, list, DataOutputStream::writeUTF);
                 } else if (sectionType.equals(SectionType.EXPERIENCE) || sectionType.equals(SectionType.EDUCATION)) {
                     dos.writeUTF(sectionType.name());
                     List<Organization> orgList = ((OrganizationSection) section).getOrganizations();
-                    dos.writeInt(orgList.size());
-                    for (Organization org : orgList) {
-                        writeLink(org.getHomePage(), dos);
-                        List<Organization.Position> posList = org.getPositions();
-                        dos.writeInt(posList.size());
-                        for (Organization.Position pos : posList) {
-                            writePosition(pos, dos);
-                        }
-                    }
+
+                    writeCollection(dos, orgList, (dos12, element) -> {
+                        writeLink(element.getHomePage(), dos12);
+                        writeCollection(dos12, element.getPositions(), (dos1, element1) -> writePosition(element1, dos1));
+                    });
                 }
             }
         }
@@ -97,17 +91,26 @@ public class DataSerializationStrategy implements SerializeStrategy {
         return resume;
     }
 
-
     private void writeLink(Link link, DataOutputStream dos) throws IOException {
         dos.writeUTF(link.getName());
-        dos.writeUTF(link.getUrl());
+        String url = link.getUrl();
+        if (url == null) {
+            dos.writeUTF("null");
+        } else {
+            dos.writeUTF(url);
+        }
     }
 
     private void writePosition(Organization.Position position, DataOutputStream dos) throws IOException {
         writeLocalDate(position.getStartDate(), dos);
         writeLocalDate(position.getEndDate(), dos);
         dos.writeUTF(position.getTitle());
-        dos.writeUTF(position.getDescription());
+        String description = position.getDescription();
+        if (description == null) {
+            dos.writeUTF("null");
+        } else {
+            dos.writeUTF(description);
+        }
     }
 
     private void writeLocalDate(LocalDate date, DataOutputStream dos) throws IOException {
@@ -116,15 +119,45 @@ public class DataSerializationStrategy implements SerializeStrategy {
     }
 
     private Link readLink(DataInputStream dis) throws IOException {
-        return new Link(dis.readUTF(), dis.readUTF());
+        String name = dis.readUTF();
+        String url = dis.readUTF();
+        return url.equals("null") ? new Link(name, null) : new Link(name, url);
     }
 
     private Organization.Position readPosition(DataInputStream dis) throws IOException {
-        return new Organization.Position(readLocalDate(dis), readLocalDate(dis), dis.readUTF(), dis.readUTF());
+        LocalDate startDate = readLocalDate(dis);
+        LocalDate finishDate = readLocalDate(dis);
+        String title = dis.readUTF();
+        String description = dis.readUTF();
+        return description.equals("null") ? new Organization.Position(startDate, finishDate, title, null) : new Organization.Position(startDate, finishDate, title, description);
     }
 
-    private LocalDate readLocalDate (DataInputStream dis) throws IOException {
+    private LocalDate readLocalDate(DataInputStream dis) throws IOException {
         return DateUtil.of(dis.readInt(), Month.of(dis.readInt()));
+    }
+
+    interface Readable<T> {
+        T readElement(DataInputStream dis) throws IOException;
+    }
+
+    interface Writable<T> {
+        void writeElement(DataOutputStream dos, T element) throws IOException;
+    }
+
+    private static <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writable<T> writer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            writer.writeElement(dos, element);
+        }
+    }
+
+    private static <T> List<T> readList(DataInputStream dis, Readable<T> reader) throws IOException {
+        int size = dis.readInt();
+        List<T> result = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            result.add(reader.readElement(dis));
+        }
+        return result;
     }
 
     /*private <T> void writeList(List<T> list, DataOutputStream dos) throws IOException {
