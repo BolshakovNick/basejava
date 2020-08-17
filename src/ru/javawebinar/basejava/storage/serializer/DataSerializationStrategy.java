@@ -19,34 +19,33 @@ public class DataSerializationStrategy implements SerializeStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+            writeCollection(dos, contacts.entrySet(), (dos13, entry) -> {
+                dos13.writeUTF(entry.getKey().name());
+                dos13.writeUTF(entry.getValue());
+            });
+
             Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            writeCollection(dos, sections.entrySet(), (dos14, entry) -> {
                 SectionType sectionType = entry.getKey();
                 AbstractSection section = entry.getValue();
-
                 if (sectionType.equals(SectionType.PERSONAL) || sectionType.equals(SectionType.OBJECTIVE)) {
-                    dos.writeUTF(sectionType.name());
-                    dos.writeUTF(section.toString());
+                    dos14.writeUTF(sectionType.name());
+                    dos14.writeUTF(section.toString());
                 } else if (sectionType.equals(SectionType.ACHIEVEMENT) || sectionType.equals(SectionType.QUALIFICATIONS)) {
-                    dos.writeUTF(sectionType.name());
+                    dos14.writeUTF(sectionType.name());
                     List<String> list = ((MarkingListSection) section).getMarkingLines();
-                    writeCollection(dos, list, DataOutputStream::writeUTF);
+                    writeCollection(dos14, list, DataOutputStream::writeUTF);
                 } else if (sectionType.equals(SectionType.EXPERIENCE) || sectionType.equals(SectionType.EDUCATION)) {
-                    dos.writeUTF(sectionType.name());
+                    dos14.writeUTF(sectionType.name());
                     List<Organization> orgList = ((OrganizationSection) section).getOrganizations();
 
-                    writeCollection(dos, orgList, (dos12, element) -> {
+                    writeCollection(dos14, orgList, (dos12, element) -> {
                         writeLink(element.getHomePage(), dos12);
                         writeCollection(dos12, element.getPositions(), (dos1, element1) -> writePosition(element1, dos1));
                     });
                 }
-            }
+
+            });
         }
     }
 
@@ -136,10 +135,6 @@ public class DataSerializationStrategy implements SerializeStrategy {
         return DateUtil.of(dis.readInt(), Month.of(dis.readInt()));
     }
 
-    interface Readable<T> {
-        T readElement(DataInputStream dis) throws IOException;
-    }
-
     interface Writable<T> {
         void writeElement(DataOutputStream dos, T element) throws IOException;
     }
@@ -150,31 +145,4 @@ public class DataSerializationStrategy implements SerializeStrategy {
             writer.writeElement(dos, element);
         }
     }
-
-    private static <T> List<T> readList(DataInputStream dis, Readable<T> reader) throws IOException {
-        int size = dis.readInt();
-        List<T> result = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            result.add(reader.readElement(dis));
-        }
-        return result;
-    }
-
-    /*private <T> void writeList(List<T> list, DataOutputStream dos) throws IOException {
-        for (T element : list) {
-            writeElement(element, dos);
-        }
-    }
-
-    private <T> void writeElement(T element, DataOutputStream dos) throws IOException {
-        if (element instanceof Link) {
-            writeLink((Link)element, dos);
-        } else if (element instanceof Organization.Position) {
-            writePosition((Organization.Position) element, dos);
-        } else if (element instanceof LocalDate) {
-            writeLocalDate((LocalDate) element, dos);
-        } else if (element instanceof String) {
-            dos.writeUTF((String) element);
-        }
-    }*/
 }
