@@ -15,6 +15,10 @@ public class SimpleTextSection extends AbstractSection {
         this.text = text;
     }
 
+    public String getText() {
+        return text;
+    }
+
     @Override
     public String toString() {
         return text;
