@@ -6,10 +6,7 @@ import ru.javawebinar.basejava.util.DateUtil;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataSerializationStrategy implements SerializeStrategy {
 
@@ -19,32 +16,33 @@ public class DataSerializationStrategy implements SerializeStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            writeCollection(dos, contacts.entrySet(), (dos13, entry) -> {
-                dos13.writeUTF(entry.getKey().name());
-                dos13.writeUTF(entry.getValue());
+            writeCollection(dos, contacts.entrySet(), (entry) -> {
+                dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getValue());
             });
-
             Map<SectionType, AbstractSection> sections = resume.getSections();
-            writeCollection(dos, sections.entrySet(), (dos14, entry) -> {
+            writeCollection(dos, sections.entrySet(), (entry) -> {
                 SectionType sectionType = entry.getKey();
                 AbstractSection section = entry.getValue();
-                if (sectionType.equals(SectionType.PERSONAL) || sectionType.equals(SectionType.OBJECTIVE)) {
-                    dos14.writeUTF(sectionType.name());
-                    dos14.writeUTF(section.toString());
-                } else if (sectionType.equals(SectionType.ACHIEVEMENT) || sectionType.equals(SectionType.QUALIFICATIONS)) {
-                    dos14.writeUTF(sectionType.name());
-                    List<String> list = ((MarkingListSection) section).getMarkingLines();
-                    writeCollection(dos14, list, DataOutputStream::writeUTF);
-                } else if (sectionType.equals(SectionType.EXPERIENCE) || sectionType.equals(SectionType.EDUCATION)) {
-                    dos14.writeUTF(sectionType.name());
-                    List<Organization> orgList = ((OrganizationSection) section).getOrganizations();
-
-                    writeCollection(dos14, orgList, (dos12, element) -> {
-                        writeLink(element.getHomePage(), dos12);
-                        writeCollection(dos12, element.getPositions(), (dos1, element1) -> writePosition(element1, dos1));
-                    });
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> {
+                        dos.writeUTF(sectionType.name());
+                        dos.writeUTF(section.toString());
+                    }
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
+                        dos.writeUTF(sectionType.name());
+                        List<String> list = ((MarkingListSection) section).getMarkingLines();
+                        writeCollection(dos, list, dos::writeUTF);
+                    }
+                    case EXPERIENCE, EDUCATION -> {
+                        dos.writeUTF(sectionType.name());
+                        List<Organization> orgList = ((OrganizationSection) section).getOrganizations();
+                        writeCollection(dos, orgList, (element) -> {
+                            writeLink(element.getHomePage(), dos);
+                            writeCollection(dos, element.getPositions(), (element1) -> writePosition(element1, dos));
+                        });
+                    }
                 }
-
             });
         }
     }
@@ -93,11 +91,7 @@ public class DataSerializationStrategy implements SerializeStrategy {
     private void writeLink(Link link, DataOutputStream dos) throws IOException {
         dos.writeUTF(link.getName());
         String url = link.getUrl();
-        if (url == null) {
-            dos.writeUTF("null");
-        } else {
-            dos.writeUTF(url);
-        }
+        dos.writeUTF(Objects.requireNonNullElse(url, "null"));
     }
 
     private void writePosition(Organization.Position position, DataOutputStream dos) throws IOException {
@@ -105,11 +99,7 @@ public class DataSerializationStrategy implements SerializeStrategy {
         writeLocalDate(position.getEndDate(), dos);
         dos.writeUTF(position.getTitle());
         String description = position.getDescription();
-        if (description == null) {
-            dos.writeUTF("null");
-        } else {
-            dos.writeUTF(description);
-        }
+        dos.writeUTF(Objects.requireNonNullElse(description, "null"));
     }
 
     private void writeLocalDate(LocalDate date, DataOutputStream dos) throws IOException {
@@ -136,13 +126,13 @@ public class DataSerializationStrategy implements SerializeStrategy {
     }
 
     interface Writable<T> {
-        void writeElement(DataOutputStream dos, T element) throws IOException;
+        void writeElement(T element) throws IOException;
     }
 
     private static <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writable<T> writer) throws IOException {
         dos.writeInt(collection.size());
         for (T element : collection) {
-            writer.writeElement(dos, element);
+            writer.writeElement(element);
         }
     }
 }
