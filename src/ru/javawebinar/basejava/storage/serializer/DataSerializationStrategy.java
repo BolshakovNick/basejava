@@ -15,8 +15,7 @@ public class DataSerializationStrategy implements SerializeStrategy {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            Map<ContactType, String> contacts = resume.getContacts();
-            writeCollection(dos, contacts.entrySet(), (entry) -> {
+            writeCollection(dos, resume.getContacts().entrySet(), (entry) -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
@@ -24,24 +23,23 @@ public class DataSerializationStrategy implements SerializeStrategy {
             writeCollection(dos, sections.entrySet(), (entry) -> {
                 SectionType sectionType = entry.getKey();
                 AbstractSection section = entry.getValue();
+                dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        dos.writeUTF(sectionType.name());
                         dos.writeUTF(((SimpleTextSection) section).getText());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        dos.writeUTF(sectionType.name());
-                        List<String> list = ((MarkingListSection) section).getMarkingLines();
-                        writeCollection(dos, list, dos::writeUTF);
+                        writeCollection(dos, ((MarkingListSection) section).getMarkingLines(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        dos.writeUTF(sectionType.name());
-                        List<Organization> orgList = ((OrganizationSection) section).getOrganizations();
-                        writeCollection(dos, orgList, (element) -> {
-                            writeLink(element.getHomePage(), dos);
+                        writeCollection(dos, ((OrganizationSection) section).getOrganizations(), (element) -> {
+                            Link link = element.getHomePage();
+                            dos.writeUTF(link.getName());
+                            String url = link.getUrl();
+                            dos.writeUTF(url == null ? "null" : url);
                             writeCollection(dos, element.getPositions(), (element1) -> writePosition(element1, dos));
                         });
                         break;
@@ -52,34 +50,30 @@ public class DataSerializationStrategy implements SerializeStrategy {
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
-        Resume resume;
         try (DataInputStream dis = new DataInputStream(is)) {
-            resume = new Resume(dis.readUTF(), dis.readUTF());
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            Resume resume = new Resume(dis.readUTF(), dis.readUTF());
+            readType(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readType(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                if (type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)) {
-                    SimpleTextSection text = new SimpleTextSection(dis.readUTF());
-                    resume.addSection(type, text);
-                } else if (type.equals(SectionType.ACHIEVEMENT) || type.equals(SectionType.QUALIFICATIONS)) {
-                    resume.addSection(type, new MarkingListSection(readList(dis, dis::readUTF)));
-                } else if (type.equals(SectionType.EXPERIENCE) || type.equals(SectionType.EDUCATION)) {
-                    List<Organization> orgList = readList(dis, () -> new Organization(readLink(dis), readList(dis, () -> readPosition(dis))));
-                    resume.addSection(type, new OrganizationSection(orgList));
+                switch (type) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        SimpleTextSection text = new SimpleTextSection(dis.readUTF());
+                        resume.addSection(type, text);
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        resume.addSection(type, new MarkingListSection(readList(dis, dis::readUTF)));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Organization> orgList = readList(dis, () -> new Organization(readLink(dis), readList(dis, () -> readPosition(dis))));
+                        resume.addSection(type, new OrganizationSection(orgList));
+                        break;
                 }
-            }
+            });
+            return resume;
         }
-        return resume;
-    }
-
-    private void writeLink(Link link, DataOutputStream dos) throws IOException {
-        dos.writeUTF(link.getName());
-        String url = link.getUrl();
-        dos.writeUTF(url == null ? "null" : url);
     }
 
     private void writePosition(Organization.Position position, DataOutputStream dos) throws IOException {
@@ -126,6 +120,17 @@ public class DataSerializationStrategy implements SerializeStrategy {
 
     interface Readable<T> {
         T readElement() throws IOException;
+    }
+
+    private interface TypeAddable {
+        void doAdd() throws IOException;
+    }
+
+    private void readType(DataInputStream dis, TypeAddable addable) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            addable.doAdd();
+        }
     }
 
     private static <T> List<T> readList(DataInputStream dis, Readable<T> reader) throws IOException {
