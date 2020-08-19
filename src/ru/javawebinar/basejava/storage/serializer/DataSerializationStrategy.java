@@ -79,7 +79,7 @@ public class DataSerializationStrategy implements SerializeStrategy {
     private void writeLink(Link link, DataOutputStream dos) throws IOException {
         dos.writeUTF(link.getName());
         String url = link.getUrl();
-        dos.writeUTF(Objects.requireNonNullElse(url, "null"));
+        dos.writeUTF(url == null ? "null" : url);
     }
 
     private void writePosition(Organization.Position position, DataOutputStream dos) throws IOException {
@@ -87,7 +87,7 @@ public class DataSerializationStrategy implements SerializeStrategy {
         writeLocalDate(position.getEndDate(), dos);
         dos.writeUTF(position.getTitle());
         String description = position.getDescription();
-        dos.writeUTF(Objects.requireNonNullElse(description, "null"));
+        dos.writeUTF(description == null ? "null" : description);
     }
 
     private void writeLocalDate(LocalDate date, DataOutputStream dos) throws IOException {
