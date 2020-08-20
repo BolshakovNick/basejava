@@ -92,7 +92,7 @@ public class DataSerializationStrategy implements SerializeStrategy {
     private Link readLink(DataInputStream dis) throws IOException {
         String name = dis.readUTF();
         String url = dis.readUTF();
-        return url.equals("null") ? new Link(name, null) : new Link(name, url);
+        return new Link(name, url.equals("null") ? null : url);
     }
 
     private Organization.Position readPosition(DataInputStream dis) throws IOException {
