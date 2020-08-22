@@ -18,12 +18,8 @@ public class MainConcurrency {
     private static final Lock WRITE_LOCK = reentrantReadWriteLock.writeLock();
     private static final Lock READ_LOCK = reentrantReadWriteLock.readLock();
 
-    private static final ThreadLocal <SimpleDateFormat> threadLocal = new ThreadLocal<>(){
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat();
-        }
-    };
+    private static final ThreadLocal <SimpleDateFormat> threadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"));
+    //DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println(Thread.currentThread().getName());
