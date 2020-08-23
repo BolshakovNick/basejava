@@ -2,8 +2,10 @@ package ru.javawebinar.basejava;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 public class MainStream {
     public static void main(String[] args) {
@@ -15,11 +17,12 @@ public class MainStream {
     }
 
     public static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce(0, (a, b) -> (int) Math.pow(10, (int) (Math.log10(b) + 1)) * a + b);
+        return Arrays.stream(values).distinct().sorted().reduce(0, (a, b) -> 10 * a + b);
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
         IntStream stream = integers.stream().mapToInt(x -> x);
-        return integers.stream().filter(stream.sum() % 2 == 0 ? x -> x % 2 != 0 : x -> x % 2 == 0).collect(Collectors.toList());
+        Predicate <Integer> predicate = stream.sum() % 2 == 0 ? x -> x % 2 != 0 : x -> x % 2 == 0;
+        return integers.stream().filter(predicate).collect(Collectors.toList());
     }
 }
