@@ -5,6 +5,6 @@ import ru.javawebinar.basejava.storage.serializer.JsonSerializationStrategy;
 public class JsonSerializationPathStorageTest extends AbstractStorageTest {
 
     public JsonSerializationPathStorageTest() {
-        super(new PathStorage(STORAGE_DIR, new JsonSerializationStrategy()));
+        super(new PathStorage(STORAGE_DIR.getAbsolutePath(), new JsonSerializationStrategy()));
     }
 }

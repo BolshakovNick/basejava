@@ -5,6 +5,6 @@ import ru.javawebinar.basejava.storage.serializer.ObjectSerializationStrategy;
 public class ObjectSerializationPathStorageTest extends AbstractStorageTest {
 
     public ObjectSerializationPathStorageTest() {
-        super(new PathStorage(STORAGE_DIR, new ObjectSerializationStrategy()));
+        super(new PathStorage(STORAGE_DIR.getAbsolutePath(), new ObjectSerializationStrategy()));
     }
 }
