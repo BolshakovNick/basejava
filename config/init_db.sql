@@ -1,4 +1,4 @@
-create table resumes.resume
+create table resume
 (
     uuid      char(36) not null
         constraint resume_pkey
@@ -6,7 +6,7 @@ create table resumes.resume
     full_name text     NOT NULL
 );
 
-create table resumes.contact
+create table contact
 (
     id          serial   not null
         constraint contact_pk
@@ -16,4 +16,4 @@ create table resumes.contact
     value       text     not null
 );
 create unique index contact_uuid_type_index
-    on resumes.contact (resume_uuid, type);
+    on contact (resume_uuid, type);
