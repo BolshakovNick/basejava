@@ -83,7 +83,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume resume) {
-        helper.execute("UPDATE resumes.resume r set 'full_name' =? WHERE uuid =?", ps -> {
+        helper.execute("UPDATE resumes.resume r set full_name =? WHERE uuid =?", ps -> {
             ps.setString(1, resume.getFullName());
             ps.setString(2, resume.getUuid());
             ps.execute();
