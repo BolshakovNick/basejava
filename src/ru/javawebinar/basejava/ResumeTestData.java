@@ -214,4 +214,18 @@ public class ResumeTestData {
 
         return resume;
     }
+
+    public static Resume fillOnlyContactsResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        Map<ContactType, String> contacts = resume.getContacts();
+
+        contacts.put(ContactType.PHONE_NUMBER, "+7(987) 654-3210");
+        contacts.put(ContactType.SKYPE, "example.skype");
+        contacts.put(ContactType.MAIL, "example@yandex.ru");
+        contacts.put(ContactType.LINKED_IN, "https://www.linkedin.com/in/example");
+        contacts.put(ContactType.GITHUB, "https://github.com/example");
+        contacts.put(ContactType.STACK_OVERFLOW, "https://stackoverflow.com/users/11111");
+        contacts.put(ContactType.HOME_PAGE, "http://example.ru/");
+        return resume;
+    }
 }

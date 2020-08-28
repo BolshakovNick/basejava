@@ -30,10 +30,10 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        RESUME_1 = ResumeTestData.nullPointsTestResume(UUID_1, "Steve King");
-        RESUME_2 = ResumeTestData.testResume(UUID_2, "Marry Poppins");
-        RESUME_3 = ResumeTestData.testResume(UUID_3, "Ivan Ivanov");
-        RESUME_4 = ResumeTestData.testResume(UUID_4, "Petr Petrov");
+        RESUME_1 = ResumeTestData.fillOnlyContactsResume(UUID_1, "Steve King");
+        RESUME_2 = ResumeTestData.fillOnlyContactsResume(UUID_2, "Marry Poppins");
+        RESUME_3 = ResumeTestData.fillOnlyContactsResume(UUID_3, "Ivan Ivanov");
+        RESUME_4 = ResumeTestData.fillOnlyContactsResume(UUID_4, "Petr Petrov");
     }
 
     public AbstractStorageTest(Storage storage) {
