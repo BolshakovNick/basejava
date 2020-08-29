@@ -31,7 +31,7 @@ public abstract class AbstractStorageTest {
 
     static {
         RESUME_1 = ResumeTestData.fillOnlyContactsResume(UUID_1, "Steve King");
-        RESUME_2 = ResumeTestData.fillOnlyContactsResume(UUID_2, "Marry Poppins");
+        RESUME_2 = new Resume(UUID_2, "Marry Poppins");
         RESUME_3 = ResumeTestData.fillOnlyContactsResume(UUID_3, "Ivan Ivanov");
         RESUME_4 = ResumeTestData.fillOnlyContactsResume(UUID_4, "Petr Petrov");
     }
