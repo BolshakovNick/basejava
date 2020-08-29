@@ -7,6 +7,7 @@ import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,10 +50,7 @@ public class SqlStorage implements Storage {
             }
             Resume resume = new Resume(uuid, rs.getString("full_name"));
             do {
-                String value = rs.getString("value");
-                if (value != null) {
-                    resume.addContact(ContactType.valueOf(rs.getString("type")), value);
-                }
+                addContact(resume, rs);
             } while (rs.next());
             return resume;
         });
@@ -74,33 +72,18 @@ public class SqlStorage implements Storage {
         return helper.execute("" +
                 "SELECT * FROM resume " +
                 "LEFT JOIN contact c " +
-                "ON resume.uuid = c.resume_uuid " +
+                "ON uuid = c.resume_uuid " +
                 "ORDER BY full_name, uuid", ps -> {
-            List<Resume> result = new ArrayList<>();
+            Map<String, Resume> resumes = new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
-                Resume resume = isExist(result, uuid);
-                if (resume == null) {
-                    resume = new Resume(uuid, rs.getString("full_name"));
-                    result.add(resume);
-                }
-                String value = rs.getString("value");
-                if (value != null) {
-                    resume.addContact(ContactType.valueOf(rs.getString("type")), value);
-                }
+                String fullName = rs.getString("full_name");
+                Resume resume = resumes.computeIfAbsent(uuid, s -> new Resume(uuid, fullName));
+                addContact(resume, rs);
             }
-            return result;
+            return new ArrayList<>(resumes.values());
         });
-    }
-
-    private Resume isExist(List<Resume> list, String uuid) {
-        for (Resume r : list) {
-            if (uuid.equals(r.getUuid())) {
-                return r;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -143,6 +126,13 @@ public class SqlStorage implements Storage {
                 ps.addBatch();
             }
             ps.executeBatch();
+        }
+    }
+
+    private void addContact(Resume resume, ResultSet rs) throws SQLException {
+        String value = rs.getString("value");
+        if (value != null) {
+            resume.addContact(ContactType.valueOf(rs.getString("type")), value);
         }
     }
 }
