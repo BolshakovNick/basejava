@@ -53,6 +53,7 @@ public class SqlStorage implements Storage {
                 }
                 resume = new Resume(uuid, rs.getString("full_name"));
             }
+
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact c  WHERE c.resume_uuid =? ")) {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
@@ -185,6 +186,7 @@ public class SqlStorage implements Storage {
                 }
                 ps.addBatch();
             }
+            ps.executeBatch();
         }
     }
 
@@ -203,10 +205,9 @@ public class SqlStorage implements Storage {
                 resume.addSection(type, new SimpleTextSection(content));
             } else if (type == SectionType.ACHIEVEMENT || type == SectionType.QUALIFICATIONS) {
                 try (BufferedReader reader = new BufferedReader(new StringReader(content))) {
+                    resume.addSection(type, new MarkingListSection(new ArrayList<>()));
                     List<String> list = ((MarkingListSection) resume.getSections().get(type)).getMarkingLines();
-                    while (reader.ready()) {
-                        list.add(reader.readLine());
-                    }
+                    reader.lines().forEach(list::add);
                 } catch (IOException e) {
                     throw new StorageException(e);
                 }
