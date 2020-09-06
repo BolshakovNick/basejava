@@ -15,11 +15,12 @@ footer {
 
 table {
     width: 100%; /* Ширина таблицы */
-    background: khaki; /* Цвет фона таблицы */
+    background: maroon; /* Цвет фона таблицы */
     color: black; /* Цвет текста */
     border-spacing: 1px; /* Расстояние между ячейками */
+    table-layout: fixed;
 }
 td, th {
-    background: maroon; /* Цвет фона ячеек */
+    background: khaki; /* Цвет фона ячеек */
     padding: 5px; /* Поля вокруг текста */
 }

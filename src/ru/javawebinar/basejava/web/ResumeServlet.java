@@ -38,7 +38,7 @@ public class ResumeServlet extends HttpServlet {
         }
     }
 
-    private static void printResume (Resume resume, Writer writer) throws IOException {
+    private static void printResume(Resume resume, Writer writer) throws IOException {
         writer.write("<html>\n" +
                 " <head>\n" +
                 "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
@@ -56,29 +56,28 @@ public class ResumeServlet extends HttpServlet {
                 "   <tr>\n" +
                 "    <td>" + resume.getUuid() + "</td>\n" +
                 "    <td>" + resume.getFullName() + "</td>\n");
-        StringBuilder contacts = new StringBuilder();
+        String contacts = "";
         for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
-            contacts.append(entry.getKey().name()).append(": ").append(entry.getValue()).append("<br>");
+            contacts = String.join("", contacts, entry.getKey().name(), ": ", entry.getValue(), "<br>");
         }
-        //contacts.deleteCharAt(contacts.length() - 1);
-        writer.write("<td>" + contacts.toString() + "</td>\n");
+        writer.write("<td>" + contacts + "</td>\n");
 
-        StringBuilder content = new StringBuilder();
+        String content = "";
         for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
             SectionType type = entry.getKey();
             AbstractSection section = entry.getValue();
-            content.append(entry.getKey().name()).append('\n');
+            content = String.join("", content, entry.getKey().name(), "<br>");
             if (type == SectionType.PERSONAL || type == SectionType.OBJECTIVE) {
-                content.append(((SimpleTextSection) section).getText()).append("<br>").append("<br>");
+                content = String.join("", content, ((SimpleTextSection) section).getText(), "<br>");
             } else if (type == SectionType.ACHIEVEMENT || type == SectionType.QUALIFICATIONS) {
                 List<String> lines = ((MarkingListSection) section).getMarkingLines();
                 for (String s : lines) {
-                    content.append(s).append("<br>");
+                    content = String.join("", content, " - ", s, "<br>");
                 }
-                content.append("<br>");
             }
+            content = String.join("", content, "<br>");
         }
-        writer.write("<td>" + content.toString() + "</td>\n" +
+        writer.write("<td>" + content + "</td>\n" +
                 "  </tr>\n" +
                 " </table>\n" +
                 " </body>\n" +
