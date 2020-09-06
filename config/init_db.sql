@@ -25,7 +25,7 @@ create table if not exists section
             primary key,
     resume_uuid char(36) not null
         constraint section_resume_uuid_fk
-            references resume,
+            references resume on delete cascade,
     type text not null,
     content text not null
 );

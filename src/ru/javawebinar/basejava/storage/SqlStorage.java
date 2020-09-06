@@ -5,14 +5,8 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     private final SqlHelper helper;
@@ -182,12 +176,11 @@ public class SqlStorage implements Storage {
                 if (type.equals("PERSONAL") || type.equals("OBJECTIVE")) {
                     ps.setString(3, ((SimpleTextSection) section).getText());
                 } else if (type.equals("ACHIEVEMENT") || type.equals("QUALIFICATIONS")) {
-                    StringBuilder builder = new StringBuilder();
+                    String s = "";
                     for (String line : ((MarkingListSection) section).getMarkingLines()) {
-                        builder.append(line).append('\n');
+                        s = String.join("", s, line, "\n");
                     }
-                    builder.deleteCharAt(builder.length() - 1);
-                    ps.setString(3, builder.toString());
+                    ps.setString(3, s);
                 }
                 ps.addBatch();
             }
@@ -209,13 +202,9 @@ public class SqlStorage implements Storage {
             if (type == SectionType.PERSONAL || type == SectionType.OBJECTIVE) {
                 resume.addSection(type, new SimpleTextSection(content));
             } else if (type == SectionType.ACHIEVEMENT || type == SectionType.QUALIFICATIONS) {
-                try (BufferedReader reader = new BufferedReader(new StringReader(content))) {
-                    resume.addSection(type, new MarkingListSection(new ArrayList<>()));
-                    List<String> list = ((MarkingListSection) resume.getSections().get(type)).getMarkingLines();
-                    reader.lines().forEach(list::add);
-                } catch (IOException e) {
-                    throw new StorageException(e);
-                }
+                List<String> list = Arrays.asList(content.split("\n"));
+                MarkingListSection listSection = new MarkingListSection(list);
+                resume.addSection(type, listSection);
             }
         }
     }

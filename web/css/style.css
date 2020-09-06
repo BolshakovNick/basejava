@@ -15,7 +15,7 @@ footer {
 
 table {
     width: 100%; /* Ширина таблицы */
-    background: maroon; /* Цвет фона таблицы */
+    background: dodgerblue; /* Цвет фона таблицы */
     color: black; /* Цвет текста */
     border-spacing: 1px; /* Расстояние между ячейками */
     table-layout: fixed;
