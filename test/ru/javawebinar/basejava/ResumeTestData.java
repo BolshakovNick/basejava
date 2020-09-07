@@ -172,7 +172,7 @@ public class ResumeTestData {
     public static Resume testResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-    /*    Map<ContactType, String> contacts = resume.getContacts();
+        Map<ContactType, String> contacts = resume.getContacts();
         Map<SectionType, AbstractSection> content = resume.getSections();
 
         contacts.put(ContactType.PHONE_NUMBER, "+7(987) 654-3210");
@@ -210,7 +210,7 @@ public class ResumeTestData {
         edu.add(new Organization(new Link("EDU-Organization 1", "http://edu-organization1.ru/"), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title1",
                 "EDU-Description1"))));
         edu.add(new Organization(new Link("EDU-Organization 2", "http://edu-organization2.ru/"), Collections.singletonList(new Organization.Position(DateUtil.of(2000, Month.JANUARY), DateUtil.of(2020, Month.JANUARY), "EDU-Title2",
-                "EDU-Description2"))));*/
+                "EDU-Description2"))));
 
         return resume;
     }
