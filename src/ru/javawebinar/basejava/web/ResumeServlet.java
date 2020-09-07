@@ -28,11 +28,14 @@ public class ResumeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setCharacterEncoding("UTF-8");
-//      response.setHeader("Content-Type", "text/html; charset=UTF-8");
+        request.setAttribute("resumes", storage.getAllSorted());
+        request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
+
+        /*        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "text/html; charset=UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-//      String name = request.getParameter("name");
-//      response.getWriter().write(name == null ? "Hello Resumes!" : "Hello, " + name + '!');
+        String name = request.getParameter("name");
+        response.getWriter().write(name == null ? "Hello Resumes!" : "Hello, " + name + '!');
         String uuid = request.getParameter("uuid");
         Writer writer = response.getWriter();
         if (uuid != null) {
@@ -42,7 +45,7 @@ public class ResumeServlet extends HttpServlet {
             for (Resume resume : storage.getAllSorted()) {
                 printResume(resume, writer);
             }
-        }
+        }*/
     }
 
     private static void printResume(Resume resume, Writer writer) throws IOException {
