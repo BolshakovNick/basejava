@@ -1,12 +1,5 @@
-<%@ page import="ru.javawebinar.basejava.model.Resume" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.javawebinar.basejava.model.ContactType" %><%--
-  Created by IntelliJ IDEA.
-  User: Local
-  Date: 07.09.2020
-  Time: 16:01
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="ru.javawebinar.basejava.model.ContactType" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -24,18 +17,15 @@
             <th></th>
             <th></th>
         </tr>
-        <%
-            for (Resume resume : (List<Resume>) request.getAttribute("resumes")) {
-        %>
-        <tr>
-            <td><a href="resume?uuid=<%=resume.getUuid()%>"><%=resume.getFullName()%></a>
-            </td>
-            <td><%=resume.getContacts().get(ContactType.MAIL)%>
-            </td>
-        </tr>
-        <%
-            }
-        %>
+        <c:forEach items="${resumes}" var="resume">
+            <jsp:useBean id="resume" type="ru.javawebinar.basejava.model.Resume"/>
+            <tr>
+                <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
+                <td><%=ContactType.MAIL.toHtml(resume.getContact(ContactType.MAIL))%><br/></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
+            </tr>
+        </c:forEach>
     </table>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
