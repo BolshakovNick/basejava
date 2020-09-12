@@ -16,6 +16,7 @@ import java.util.UUID;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
+    public static final Resume EMPTY_RESUME;
 
     // Unique identifier
     private String uuid;
@@ -26,6 +27,10 @@ public class Resume implements Comparable<Resume>, Serializable {
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
+    }
+
+    static {
+        EMPTY_RESUME = new Resume("");
     }
 
     public Resume(String fullName) {

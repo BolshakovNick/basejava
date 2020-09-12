@@ -10,9 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -39,7 +38,27 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for (SectionType type : SectionType.values()) {
-
+            String value = request.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                switch (type) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        r.addSection(type, new SimpleTextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> list =Arrays.asList(value.split("\n"));
+                        for (String line : value.split("\n")) {
+                            r.addSection(type, new MarkingListSection(list));
+                        }
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        
+                }
+            } else {
+                r.getContacts().remove(type);
+            }
         }
         storage.update(r);
         response.sendRedirect("resume");
@@ -63,6 +82,9 @@ public class ResumeServlet extends HttpServlet {
             case "edit":
                 r = storage.get(uuid);
                 break;
+            case "add":
+                r = Resume.EMPTY_RESUME;
+                break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }
@@ -72,7 +94,7 @@ public class ResumeServlet extends HttpServlet {
         ).forward(request, response);
     }
 
-    private static void printResume(Resume resume, Writer writer) throws IOException {
+    /*private static void printResume(Resume resume, Writer writer) throws IOException {
         writer.write("<html>\n" +
                 " <head>\n" +
                 "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
@@ -116,5 +138,5 @@ public class ResumeServlet extends HttpServlet {
                 " </table>\n" +
                 " </body>\n" +
                 "</html>");
-    }
+    }*/
 }
