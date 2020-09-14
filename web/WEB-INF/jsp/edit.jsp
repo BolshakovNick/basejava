@@ -10,6 +10,10 @@
     <jsp:useBean id="resume" type="ru.javawebinar.basejava.model.Resume" scope="request"/>
     <title>Резюме ${resume.fullName}</title>
     <link rel='icon' type='image' src="img/pencil.png">
+    <script type='text/javascript'>
+        function test() {
+            alert(document.getElementById('txt').value.replace(/\n+/g, ''));
+        };</script>
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
@@ -37,10 +41,22 @@
                                    value="${resume.getSection(type)}"></dd>
                     </c:when>
                     <c:when test="${type=='QUALIFICATIONS'}">
-                        <textarea name='QUALIFICATIONS'><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.QUALIFICATIONS)).getMarkingLines())%></textarea>
+                        <c:if test="${action == 'add'}">
+                            <textarea id="txt" name='QUALIFICATIONS' rows="5" cols="50"></textarea>
+                        </c:if>
+                        <c:if test="${action != 'add'}">
+                            <textarea id="txt" name='QUALIFICATIONS'
+                                      rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.QUALIFICATIONS)).getMarkingLines())%></textarea>
+                        </c:if>
                     </c:when>
                     <c:when test="${type=='ACHIEVEMENT'}">
-                        <textarea name='ACHIEVEMENT'><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.ACHIEVEMENT)).getMarkingLines())%></textarea>
+                        <c:if test="${action == 'add'}">
+                            <textarea id="txt" name='ACHIEVEMENT' rows="5" cols="50"></textarea>
+                        </c:if>
+                        <c:if test="${action != 'add'}">
+                            <textarea id="txt" name='ACHIEVEMENT'
+                                      rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.ACHIEVEMENT)).getMarkingLines())%></textarea>
+                        </c:if>
                     </c:when>
                 </c:choose>
             </dl>

@@ -47,14 +47,13 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        List<String> list =Arrays.asList(value.split("\n"));
-                        for (String line : value.split("\n")) {
-                            r.addSection(type, new MarkingListSection(list));
-                        }
+                        List<String> list = Arrays.asList(value.split("\n"));
+                        list.removeAll(Arrays.asList("", null, "\n"));
+                        r.addSection(type, new MarkingListSection(list));
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        
+
                 }
             } else {
                 r.getContacts().remove(type);
