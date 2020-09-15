@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -47,8 +48,9 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        List<String> list = Arrays.asList(value.split("\n"));
-                        list.removeAll(Arrays.asList("", null, "\n"));
+                        List<String> list = Arrays.stream(value.split("\n"))
+                                .map(s -> "\r".equals(s) || " ".equals(s) || "\n".equals(s) ? s = "" : s)
+                                .collect(Collectors.toList());
                         r.addSection(type, new MarkingListSection(list));
                         break;
                     case EDUCATION:

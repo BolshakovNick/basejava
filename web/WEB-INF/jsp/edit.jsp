@@ -1,6 +1,7 @@
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
 <%@ page import="ru.javawebinar.basejava.model.SectionType" %>
 <%@ page import="ru.javawebinar.basejava.model.MarkingListSection" %>
+<%@ page import="ru.javawebinar.basejava.model.AbstractSection" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -33,6 +34,8 @@
         </c:forEach>
         <h3>Секции:</h3>
         <c:forEach var="type" items="<%=SectionType.values()%>">
+            <%--<jsp:useBean id="type" type="ru.javawebinar.basejava.model.SectionType"/>--%>
+            <%--<jsp:useBean id="section" type="ru.javawebinar.basejava.model.AbstractSection"/>--%>
             <dl>
                 <dt>${type.title}</dt>
                 <c:choose>
@@ -40,22 +43,19 @@
                         <dd><input type="text" name="${type.name()}" size=50
                                    value="${resume.getSection(type)}"></dd>
                     </c:when>
-                    <c:when test="${type=='QUALIFICATIONS'}">
+                    <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
                         <c:if test="${action == 'add'}">
-                            <textarea id="txt" name='QUALIFICATIONS' rows="5" cols="50"></textarea>
+                            <textarea id="txt" name=type rows="5" cols="50"></textarea>
                         </c:if>
                         <c:if test="${action != 'add'}">
-                            <textarea id="txt" name='QUALIFICATIONS'
-                                      rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.QUALIFICATIONS)).getMarkingLines())%></textarea>
-                        </c:if>
-                    </c:when>
-                    <c:when test="${type=='ACHIEVEMENT'}">
-                        <c:if test="${action == 'add'}">
-                            <textarea id="txt" name='ACHIEVEMENT' rows="5" cols="50"></textarea>
-                        </c:if>
-                        <c:if test="${action != 'add'}">
-                            <textarea id="txt" name='ACHIEVEMENT'
-                                      rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.ACHIEVEMENT)).getMarkingLines())%></textarea>
+                            <c:if test="${type == 'QUALIFICATIONS'}">
+                                <textarea id="txt" name=type
+                                          rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.QUALIFICATIONS)).getMarkingLines())%></textarea>
+                            </c:if>
+                            <c:if test="${type == 'ACHIEVEMENT'}">
+                                <textarea id="txt" name=type
+                                          rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.ACHIEVEMENT)).getMarkingLines())%></textarea>
+                            </c:if>
                         </c:if>
                     </c:when>
                 </c:choose>
