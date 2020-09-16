@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,7 +85,23 @@ public class ResumeServlet extends HttpServlet {
                 r = storage.get(uuid);
                 break;
             case "add":
-                r = Resume.EMPTY_RESUME;
+                r = new Resume("");
+                for (SectionType type: SectionType.values()) {
+                    switch (type) {
+                        case PERSONAL:
+                        case OBJECTIVE:
+                            r.addSection(type, new SimpleTextSection(""));
+                            break;
+                        case QUALIFICATIONS:
+                        case ACHIEVEMENT:
+                            r.addSection(type, new MarkingListSection(new ArrayList<>()));
+                            break;
+                        case EXPERIENCE:
+                        case EDUCATION:
+                            r.addSection(type, new Organization(new Link("", null), new ArrayList<>()));
+                            break;
+                    }
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");

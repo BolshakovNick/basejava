@@ -34,8 +34,8 @@
         </c:forEach>
         <h3>Секции:</h3>
         <c:forEach var="type" items="<%=SectionType.values()%>">
-            <%--<jsp:useBean id="type" type="ru.javawebinar.basejava.model.SectionType"/>--%>
-            <%--<jsp:useBean id="section" type="ru.javawebinar.basejava.model.AbstractSection"/>--%>
+            <c:set var="section" value="${resume.getSection(type)}"/>
+            <jsp:useBean id="section" type="ru.javawebinar.basejava.model.AbstractSection"/>
             <dl>
                 <dt>${type.title}</dt>
                 <c:choose>
@@ -48,14 +48,8 @@
                             <textarea id="txt" name=type rows="5" cols="50"></textarea>
                         </c:if>
                         <c:if test="${action != 'add'}">
-                            <c:if test="${type == 'QUALIFICATIONS'}">
-                                <textarea id="txt" name=type
-                                          rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.QUALIFICATIONS)).getMarkingLines())%></textarea>
-                            </c:if>
-                            <c:if test="${type == 'ACHIEVEMENT'}">
-                                <textarea id="txt" name=type
-                                          rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) resume.getSection(SectionType.ACHIEVEMENT)).getMarkingLines())%></textarea>
-                            </c:if>
+                            <textarea id="txt" name=type
+                                      rows="5" cols="50"><%=String.join("\n", ((MarkingListSection) section).getMarkingLines())%></textarea>
                         </c:if>
                     </c:when>
                 </c:choose>
