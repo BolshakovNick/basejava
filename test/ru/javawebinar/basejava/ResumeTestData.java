@@ -10,7 +10,7 @@ public class ResumeTestData {
     public static void main(String[] args) {
         Resume resume = new Resume("uuid1", "Григорий Кислин");
         Map<ContactType, String> contacts = resume.getContacts();
-        Map<SectionType, AbstractSection> content = resume.getSections();
+        Map<SectionType, Section> content = resume.getSections();
 
         contacts.put(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
@@ -118,7 +118,7 @@ public class ResumeTestData {
         System.out.println();
         System.out.println();
 
-        for (Map.Entry<SectionType, AbstractSection> pair : content.entrySet()) {
+        for (Map.Entry<SectionType, Section> pair : content.entrySet()) {
             System.out.println(pair.getKey().getTitle() + '\n' + pair.getValue().toString() + '\n');
         }
     }
@@ -173,7 +173,7 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
 
         Map<ContactType, String> contacts = resume.getContacts();
-        Map<SectionType, AbstractSection> content = resume.getSections();
+        Map<SectionType, Section> content = resume.getSections();
 
         contacts.put(ContactType.PHONE_NUMBER, "+7(987) 654-3210");
         contacts.put(ContactType.SKYPE, "example.skype");
@@ -232,7 +232,7 @@ public class ResumeTestData {
     public static Resume fillAllWithoutOrganizations(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         Map<ContactType, String> contacts = resume.getContacts();
-        Map<SectionType, AbstractSection> content = resume.getSections();
+        Map<SectionType, Section> content = resume.getSections();
 
         contacts.put(ContactType.PHONE_NUMBER, "+7(987) 654-3210");
         contacts.put(ContactType.SKYPE, "example.skype");

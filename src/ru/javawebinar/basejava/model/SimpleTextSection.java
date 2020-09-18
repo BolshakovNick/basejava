@@ -2,7 +2,8 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class SimpleTextSection extends AbstractSection {
+public class SimpleTextSection extends Section {
+    public static final SimpleTextSection EMPTY = new SimpleTextSection("");
     private static final long serialVersionUID = 1L;
 
     private String text;

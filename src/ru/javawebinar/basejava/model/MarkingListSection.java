@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MarkingListSection extends AbstractSection {
+public class MarkingListSection extends Section {
     private static final long serialVersionUID = 1L;
+
+    public static final MarkingListSection EMPTY = new MarkingListSection("");
 
     private final List<String> markingLines;
 

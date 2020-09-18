@@ -14,7 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization extends AbstractSection {
+public class Organization extends Section {
+    public static final Organization EMPTY = new Organization("", "", Position.EMPTY);
     private static final long serialVersionUID = 1L;
 
     private Link homePage;
@@ -69,6 +70,7 @@ public class Organization extends AbstractSection {
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
+        public static final Position EMPTY = new Position();
         private static final long serialVersionUID = 1L;
 
         @XmlJavaTypeAdapter(LocalDateAdapter.class)

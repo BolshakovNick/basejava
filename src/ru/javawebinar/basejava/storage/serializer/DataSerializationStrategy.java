@@ -19,10 +19,10 @@ public class DataSerializationStrategy implements SerializeStrategy {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
-            Map<SectionType, AbstractSection> sections = resume.getSections();
+            Map<SectionType, Section> sections = resume.getSections();
             writeCollection(dos, sections.entrySet(), (entry) -> {
                 SectionType sectionType = entry.getKey();
-                AbstractSection section = entry.getValue();
+                Section section = entry.getValue();
                 dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL:
@@ -52,23 +52,23 @@ public class DataSerializationStrategy implements SerializeStrategy {
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-            readType(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readType(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
             readType(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
                 switch (type) {
                     case PERSONAL:
                     case OBJECTIVE:
                         SimpleTextSection text = new SimpleTextSection(dis.readUTF());
-                        resume.addSection(type, text);
+                        resume.setSection(type, text);
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        resume.addSection(type, new MarkingListSection(readList(dis, dis::readUTF)));
+                        resume.setSection(type, new MarkingListSection(readList(dis, dis::readUTF)));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> orgList = readList(dis, () -> new Organization(readLink(dis), readList(dis, () -> readPosition(dis))));
-                        resume.addSection(type, new OrganizationSection(orgList));
+                        resume.setSection(type, new OrganizationSection(orgList));
                         break;
                 }
             });

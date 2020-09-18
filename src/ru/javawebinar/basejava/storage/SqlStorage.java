@@ -1,7 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.Section;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
@@ -164,10 +164,10 @@ public class SqlStorage implements Storage {
 
     private void insertSections(Resume resume, Connection connection) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement("INSERT INTO section (resume_uuid, type, content) VALUES (?,?,?)")) {
-            for (Map.Entry<SectionType, AbstractSection> e : resume.getSections().entrySet()) {
+            for (Map.Entry<SectionType, Section> e : resume.getSections().entrySet()) {
                 ps.setString(1, resume.getUuid());
                 ps.setString(2, e.getKey().name());
-                ps.setString(3, JsonParser.write(e.getValue(), AbstractSection.class));
+                ps.setString(3, JsonParser.write(e.getValue(), Section.class));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -177,7 +177,7 @@ public class SqlStorage implements Storage {
     private void addContact(Resume resume, ResultSet rs) throws SQLException {
         String value = rs.getString("value");
         if (value != null) {
-            resume.addContact(ContactType.valueOf(rs.getString("type")), value);
+            resume.setContact(ContactType.valueOf(rs.getString("type")), value);
         }
     }
 
@@ -185,7 +185,7 @@ public class SqlStorage implements Storage {
         String content = rs.getString("content");
         if (content != null) {
             SectionType type = SectionType.valueOf(rs.getString("type"));
-            resume.addSection(type, JsonParser.read(content, AbstractSection.class));
+            resume.setSection(type, JsonParser.read(content, Section.class));
         }
     }
 

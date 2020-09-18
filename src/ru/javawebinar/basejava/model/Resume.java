@@ -17,13 +17,24 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final Resume EMPTY = new Resume();
+
+    static {
+        EMPTY.setSection(SectionType.OBJECTIVE, SimpleTextSection.EMPTY);
+        EMPTY.setSection(SectionType.PERSONAL, SimpleTextSection.EMPTY);
+        EMPTY.setSection(SectionType.ACHIEVEMENT, MarkingListSection.EMPTY);
+        EMPTY.setSection(SectionType.QUALIFICATIONS, MarkingListSection.EMPTY);
+        EMPTY.setSection(SectionType.EXPERIENCE, new OrganizationSection(Organization.EMPTY));
+        EMPTY.setSection(SectionType.EDUCATION, new OrganizationSection(Organization.EMPTY));
+    }
+
     // Unique identifier
     private String uuid;
     private String fullName;
 
     //https://www.codeflow.site/ru/article/java-enum-map
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
     }
@@ -55,15 +66,15 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts;
     }
 
-    public Map<SectionType, AbstractSection> getSections() {
+    public Map<SectionType, Section> getSections() {
         return sections;
     }
 
-    public void addContact(ContactType type, String value) {
+    public void setContact(ContactType type, String value) {
         contacts.put(type, value);
     }
 
-    public void addSection(SectionType type, AbstractSection value) {
+    public void setSection(SectionType type, Section value) {
         sections.put(type, value);
     }
 
@@ -105,7 +116,7 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts.get(type);
     }
 
-    public AbstractSection getSection(SectionType type) {
+    public Section getSection(SectionType type) {
         return sections.get(type);
     }
 }
